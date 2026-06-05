@@ -22,7 +22,7 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 <br>
 <br>
 <h4>💻 Try it here:</h4>
-👉 https://your-netlify-link.netlify.app
+👉 [https://your-netlify-link.netlify.app](https://your-movieflix-site.netlify.app/)
 <br>
 <br>
 
