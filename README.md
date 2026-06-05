@@ -1,16 +1,56 @@
-# React + Vite
+🎬 MOVIEFLIX
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🍿 Unlimited movies, TV shows, and more — built by a developer.
 
-Currently, two official plugins are available:
+🔴 “Watch what you want, anytime you want.”
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+MovieFlix is a Netflix-inspired streaming UI built with React and powered by the TMDB API.
+It recreates the modern Netflix experience with trending rows, hero banners, infinite scroll, and TV/movie switching.
 
-## React Compiler
+🎥 LIVE PREVIEW
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🌐 Watch it here:
+👉 [https://your-netlify-link.netlify.app](https://your-movieflix-site.netlify.app/)
 
-## Expanding the ESLint configuration
+🍿 NOW STREAMING (FEATURES)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+✨ Trending Movies Hero Section
+⭐ Top Rated Picks
+🔥 Action & Comedy Collections
+📺 TV Shows Mode
+🎬 Auto-Rotating Hero Banner
+🔍 Smart Search Experience
+▶ Trailer Button (YouTube integration)
+♾️ Infinite Scroll Like Netflix Feed
+📱 Fully Responsive (Mobile + Desktop)
+
+🧠 BUILT WITH
+
+🎭 Frontend Power:
+
+React (Vite)
+JavaScript (ES6+)
+CSS3 (Custom Netflix-style UI)
+
+
+
+Dark cinematic UI 🎥
+Large hero banners 🔥
+Smooth scrolling rows ♾️
+Hover interactions 🎬
+Movie overlays + trailers ▶
+
+
+
+📡 API Reference
+
+This project uses The Movie Database (TMDB) API
+
+🌐 https://www.themoviedb.org/documentation/api
+
+
+🚀 Deployment
+
+Deployed using Netlify ⚡
+Auto-updates on every push to the main branch.
+
