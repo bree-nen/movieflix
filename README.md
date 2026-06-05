@@ -1,10 +1,8 @@
 
 <h1>🎬 MovieFlix</h1>
 <h3>Aesthetic movie streaming experience inspired by Netflix 💕</h3>
-
 <br>
 <br>
-
 <h3>✨ About the Project</h3>
 
 MovieFlix is a modern movie browsing platform built with React, designed to recreate the cinematic feel of Netflix — but with a softer, more aesthetic touch 🎀
@@ -22,7 +20,7 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 <br>
 <br>
 <h4>💻 Try it here:</h4>
-👉 [https://your-netlify-link.netlify.app](https://your-movieflix-site.netlify.app/)
+👉 https://your-movieflix-site.netlify.app/
 <br>
 <br>
 
@@ -34,7 +32,6 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 🔍 Search anything instantly
 🎬 Watch trailers via YouTube
 ♾️ Scroll endlessly like Netflix
-
 <br>
 <br>
 <h3>🧠 Tech Stack</h3>
@@ -43,12 +40,10 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 React (Vite) ⚛️
 JavaScript (ES6+) 🟡
 CSS3 🎨
-
 <br>
 <br>
 🎥 Data
 TMDB API
-
 <br>
 <br>
 
@@ -60,14 +55,12 @@ large hero banners like Netflix 🔥
 continuous scrolling feed ♾️
 minimal distractions, full immersion 💗
 📡 API Used
-
 <br>
 <br>
 
 🎥 The Movie Database (TMDB)
 https://www.themoviedb.org/documentation/api
 
-<br>
 <br>
 <h3>
 🚀 Deployment</h3>
