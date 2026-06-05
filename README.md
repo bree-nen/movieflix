@@ -2,7 +2,6 @@
 <h1>🎬 MovieFlix</h1>
 <h3>Aesthetic movie streaming experience inspired by Netflix 💕</h3>
 <br>
-<br>
 <h3>✨ About the Project</h3>
 
 MovieFlix is a modern movie browsing platform built with React, designed to recreate the cinematic feel of Netflix — but with a softer, more aesthetic touch 🎀
