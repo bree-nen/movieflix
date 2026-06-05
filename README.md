@@ -10,6 +10,8 @@ MovieFlix is a modern movie browsing platform built with React, designed to recr
 
 It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, scrollable experience where users can explore movies and TV shows effortlessly.
 
+
+
 <h3>This project focuses on:</h3>
 
 ✨ Beautiful UI/UX
@@ -17,6 +19,8 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 ♾️ Infinite content flow
 💗 Clean, minimal design with personality
 🌐 Live Demo
+
+
 
 <h4>💻 Try it here:</h4>
 👉 https://your-netlify-link.netlify.app
@@ -29,6 +33,7 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 🔍 Search anything instantly
 🎬 Watch trailers via YouTube
 ♾️ Scroll endlessly like Netflix
+
 
 
 
@@ -45,6 +50,7 @@ TMDB API
 
 
 
+
 <h4>This project focuses on creating a soft cinematic feel:</h4>
 
 dark elegant UI 🎬
@@ -54,8 +60,12 @@ continuous scrolling feed ♾️
 minimal distractions, full immersion 💗
 📡 API Used
 
+
+
 🎥 The Movie Database (TMDB)
 https://www.themoviedb.org/documentation/api
+
+
 
 <h3>
 🚀 Deployment</h3>
