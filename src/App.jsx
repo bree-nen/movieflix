@@ -303,6 +303,20 @@ const getGenreNames = (movie, limit = 2) => {
 
 
 
+
+const linkStyle = {
+  color: "#e50914",
+  textDecoration: "none",
+  fontSize: "14px",
+  transition: "0.2s ease",
+};
+
+
+
+
+
+
+
   return (
     <div className="app">
 
@@ -507,62 +521,42 @@ const getGenreNames = (movie, limit = 2) => {
 
        {/* FOOTER  */}
 
-       <footer
-  style={{
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    padding: "20px 40px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "30px",
-    background: "transparent",
-    borderTop: "1px solid rgba(255,255,255,0.02)",
-    backdropFilter: "blur(4px)",
-    WebkitBackdropFilter: "blur(10px)",
-    
-    zIndex: 1000,
-  }}
+      
+
+ <footer
+
+style={{
+  position: "fixed",
+  bottom: 0,
+  left: 0,
+  width: "100%",
+  padding: "14px 40px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "18px",
+  background: "transparent",
+  borderTop: "1px solid rgba(255,255,255,0.02)",
+  backdropFilter: "blur(4px)",
+  WebkitBackdropFilter: "blur(6px)",
+  zIndex: 1000,
+}}
+
 >
-      <a
-          href="/about"
-            style={
-              {
-               color: "#e50914",
-               textDecoration: "none",
-                fontSize: "14px",
-              }}
-     >
-              About
-      </a>
 
-  <a
-    href="/contact"
-    style={{
-      color: "#e50914",
-      textDecoration: "none",
-      fontSize: "14px",
-    }}
-  >
-    Contact
-  </a>
+<a href="/about" style={linkStyle}>About</a>
+<a href="/contact" style={linkStyle}>Contact</a>
+<a href="/privacy-policy" style={linkStyle}>Privacy Policy</a>
+<a href="/terms" style={linkStyle}>Terms</a>
 
-  <a
-    href="/privacy-policy"
-    style={{
-      color: "#e50914",
-      textDecoration: "none",
-      fontSize: "14px",
-    }}
-  >
-    Privacy Policy
-  </a>
+
+
 </footer>
       
 
-    </div>
+</div>
+
+
   );
 
 }

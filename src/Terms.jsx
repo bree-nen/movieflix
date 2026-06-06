@@ -1,37 +1,34 @@
 
 
-
-export default function PrivacyPolicy() {
+export default function Terms() {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Privacy Policy</h1>
+        <h1 style={styles.title}>Terms of Service</h1>
 
         <p style={styles.text}>
-          Movieflix respects your privacy and is committed to protecting your personal data.
+          By using Movieflix, you agree to the following terms and conditions.
         </p>
 
-        <h3 style={styles.subtitle}>Information We Collect</h3>
+        <h3 style={styles.subtitle}>1. Content</h3>
         <p style={styles.text}>
-          We may collect basic usage data such as pages visited and interactions to improve user experience.
+          Movieflix does not host or store any movies or TV shows. All content is provided
+          via third-party APIs for informational and discovery purposes only.
         </p>
 
-        <h3 style={styles.subtitle}>Cookies</h3>
+        <h3 style={styles.subtitle}>2. Usage</h3>
         <p style={styles.text}>
-          We may use cookies to enhance website performance and analytics.
+          Users agree to use this website responsibly and not misuse any features or services.
         </p>
 
-        <h3 style={styles.subtitle}>Third-Party Services</h3>
+        <h3 style={styles.subtitle}>3. Changes</h3>
         <p style={styles.text}>
-          We use TMDB API and may integrate Google services such as AdSense in the future.
+          We may update these terms at any time without prior notice.
         </p>
 
-        <h3 style={styles.subtitle}>Contact</h3>
-        <p style={styles.text}>
-          If you have questions, contact us via the website or project owner.
+        <p style={styles.small}>
+          Last updated: 2026
         </p>
-
-        <p style={styles.small}>Last updated: 2026</p>
       </div>
     </div>
   );
@@ -61,6 +58,7 @@ const styles = {
   },
   subtitle: {
     marginTop: "20px",
+    color: "#fff",
   },
   text: {
     opacity: 0.85,
