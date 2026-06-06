@@ -1,5 +1,7 @@
 
 
+import { Link } from "react-router-dom";
+
 import { useEffect, useState, useRef } from "react";
 import {
   TRENDING_URL,
@@ -544,10 +546,10 @@ style={{
 
 >
 
-<a href="/about" style={linkStyle}>About</a>
-<a href="/contact" style={linkStyle}>Contact</a>
-<a href="/privacy-policy" style={linkStyle}>Privacy Policy</a>
-<a href="/terms" style={linkStyle}>Terms</a>
+<Link to="/about" style={linkStyle}>About</Link>
+<Link to="/contact" style={linkStyle}>Contact</Link>
+<Link to="/privacy-policy" style={linkStyle}>Privacy Policy</Link>
+<Link to="/terms" style={linkStyle}>Terms</Link>
 
 
 
