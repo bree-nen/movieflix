@@ -36,6 +36,7 @@ function App() {
   37: "Western",
 };
 
+
 // helper function (reusable everywhere)
 const getGenreNames = (movie, limit = 2) => {
   if (!movie?.genre_ids) return "";
@@ -353,18 +354,8 @@ const getGenreNames = (movie, limit = 2) => {
 />
 
 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-  <a
-    href="/privacy-policy"
-    style={{
-      color: "#e50914",
-      fontSize: "14px",
-      textDecoration: "none",
-      marginLeft: "-140px",
-      whiteSpace: "nowrap",
-    }}
-  >
-    Privacy Policy
-  </a>
+
+ 
 
   </div>
 
@@ -375,6 +366,7 @@ const getGenreNames = (movie, limit = 2) => {
       </nav>
 
       {/* HERO */}
+
 {mode === "movies" && (
   <section
     className="hero"
@@ -388,6 +380,7 @@ const getGenreNames = (movie, limit = 2) => {
       <h1>{heroMovie.title || "Loading..."}</h1>
 
       {/* 👇 NEW: Year + REAL Genre Names */}
+
       <p style={{ opacity: 0.8, marginBottom: "10px" }}>
         {heroMovie.release_date?.slice(0, 4)}{" "}
         {heroMovie.genre_ids?.length
@@ -448,6 +441,7 @@ const getGenreNames = (movie, limit = 2) => {
 )}
 
       {/* CONTENT */}
+
       {mode === "movies" ? (
         <>
           <MovieRow title="Trending Now" movies={trending} />
@@ -485,6 +479,7 @@ const getGenreNames = (movie, limit = 2) => {
       <div ref={loaderRef} style={{ height: "60px" }} />
 
       {/* MODAL */}
+
       {selectedMovie && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -508,6 +503,65 @@ const getGenreNames = (movie, limit = 2) => {
           </div>
         </div>
       )}
+
+
+       {/* FOOTER  */}
+
+       <footer
+  style={{
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    padding: "20px 40px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "30px",
+    background: "transparent",
+    borderTop: "1px solid rgba(255,255,255,0.02)",
+    backdropFilter: "blur(4px)",
+    WebkitBackdropFilter: "blur(10px)",
+    
+    zIndex: 1000,
+  }}
+>
+      <a
+          href="/about"
+            style={
+              {
+               color: "#e50914",
+               textDecoration: "none",
+                fontSize: "14px",
+              }}
+     >
+              About
+      </a>
+
+  <a
+    href="/contact"
+    style={{
+      color: "#e50914",
+      textDecoration: "none",
+      fontSize: "14px",
+    }}
+  >
+    Contact
+  </a>
+
+  <a
+    href="/privacy-policy"
+    style={{
+      color: "#e50914",
+      textDecoration: "none",
+      fontSize: "14px",
+    }}
+  >
+    Privacy Policy
+  </a>
+</footer>
+      
+
     </div>
   );
 
