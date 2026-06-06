@@ -304,7 +304,9 @@ const getGenreNames = (movie, limit = 2) => {
 
   return (
     <div className="app">
+
       {/* NAVBAR */}
+
       <nav className="navbar">
         <h1
           className="logo"
@@ -343,14 +345,33 @@ const getGenreNames = (movie, limit = 2) => {
           Movies
         </button>
 
-        <input
-          className="search-bar"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search..."
-        />
+ <input
+  className="search-bar"
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  placeholder="Search..."
+/>
 
-        <div className="profile"></div>
+<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+  <a
+    href="/privacy-policy"
+    style={{
+      color: "#e50914",
+      fontSize: "14px",
+      textDecoration: "none",
+      marginLeft: "-140px",
+      whiteSpace: "nowrap",
+    }}
+  >
+    Privacy Policy
+  </a>
+
+  </div>
+
+
+
+
+
       </nav>
 
       {/* HERO */}
@@ -489,6 +510,8 @@ const getGenreNames = (movie, limit = 2) => {
       )}
     </div>
   );
+
 }
+ 
 
 export default App;
