@@ -248,3 +248,25 @@ body {
 .trailer-btn:hover {
   background: #ff1b2d;
 }
+
+
+.ad-slot {
+  width: 100%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ad-box {
+  width: 100%;
+  max-width: 970px;
+  height: 90px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 13px;
+}

@@ -264,6 +264,44 @@ const getGenreNames = (movie, limit = 2) => {
     </section>
   );
 
+
+
+
+  const AdBanner = ({ label = "Advertisement" }) => (
+  <div
+    style={{
+      width: "100%",
+      padding: "10px",
+      margin: "20px 0",
+      textAlign: "center",
+      background: "#111",
+      border: "1px solid #333",
+      color: "#777",
+      fontSize: "12px",
+      borderRadius: "8px",
+    }}
+  >
+    {label}
+
+    {/* Google AdSense will replace this div later */}
+    <div
+      style={{
+        height: "90px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#444",
+        marginTop: "8px",
+      }}
+    >
+      Ad Space (Google AdSense)
+    </div>
+  </div>
+);
+
+
+
+
   return (
     <div className="app">
       {/* NAVBAR */}
@@ -392,12 +430,19 @@ const getGenreNames = (movie, limit = 2) => {
       {mode === "movies" ? (
         <>
           <MovieRow title="Trending Now" movies={trending} />
+          <AdBanner />
           <MovieRow title="Top Rated" movies={topRated} />
+          <AdBanner />
           <MovieRow title="Action Movies" movies={action} />
+          <AdBanner />
           <MovieRow title="Comedy Movies" movies={comedy} />
+          <AdBanner />
 
           <section className="movie-row">
             <h2>🔥 Popular Movies</h2>
+
+               <AdBanner />
+
             <div className="movie-feed">
               {feedMovies.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
