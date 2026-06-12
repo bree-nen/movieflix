@@ -53,6 +53,9 @@ const getGenreNames = (movie, limit = 2) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null);
 
+  const [movieDetails, setMovieDetails] = useState(null);
+  const [cast, setCast] = useState([]);
+
   const [trending, setTrending] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [action, setAction] = useState([]);
@@ -72,11 +75,36 @@ const getGenreNames = (movie, limit = 2) => {
 
   const [heroIndex, setHeroIndex] = useState(0);
 
+  const [isFading, setIsFading] = useState(false);
+
   const [mode, setMode] = useState("movies"); // 👈 NEW: movies | tv
+
 
   const loaderRef = useRef(null);
 
-  const openMovie = (movie) => setSelectedMovie(movie);
+  const openMovie = async (movie) => {
+  setSelectedMovie(movie);
+
+  try {
+    // GET FULL DETAILS (rating + overview)
+    const detailsRes = await fetch(
+      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}?api_key=5397bbf0a2433675faec26633a785796`
+    );
+    const detailsData = await detailsRes.json();
+    setMovieDetails(detailsData);
+
+    // GET CAST
+    const creditsRes = await fetch(
+      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/credits?api_key=5397bbf0a2433675faec26633a785796`
+    );
+    const creditsData = await creditsRes.json();
+
+    setCast(creditsData.cast?.slice(0, 8) || []);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   const closeModal = () => setSelectedMovie(null);
 
   const openTrailer = (movie) => {
@@ -116,6 +144,17 @@ const getGenreNames = (movie, limit = 2) => {
 
     return () => clearInterval(interval);
   }, [trending]);
+
+
+  useEffect(() => {
+  setIsFading(true);
+
+  const timeout = setTimeout(() => {
+    setIsFading(false);
+  }, 1200);
+
+  return () => clearTimeout(timeout);
+}, [heroIndex]);
 
   const heroMovie = trending[heroIndex] || {};
 
@@ -316,9 +355,6 @@ const linkStyle = {
 
 
 
-
-
-
   return (
     <div className="app">
 
@@ -374,14 +410,99 @@ const linkStyle = {
  
 
   </div>
+</nav> 
+
+{/* HOMEPAGE CONTENT FOR ADSENSE */}
+
+{mode === "movies" && (
+
+  <section className="hero-section">
+
+   
+
+     <div className="bg bg-1"
+  style={{
+    backgroundImage: `url(https://image.tmdb.org/t/p/original${trending[heroIndex]?.backdrop_path})`,
+    opacity: isFading ? 0 : 1,
+  }}
+/>
+
+<div className="bg bg-2"
+  style={{
+    backgroundImage: `url(https://image.tmdb.org/t/p/original${trending[(heroIndex + 1) % trending.length]?.backdrop_path})`,
+    opacity: isFading ? 1 : 0,
+  }}
+/>
+
+ <div className="hero-content">
 
 
+    <h1>
+     Discover Movies & TV Shows Like Never Before
+    </h1>
+
+<p>
+  Welcome to MovieFlix — your personalized streaming discovery platform.
+  Explore trending movies, top-rated films, and popular TV shows all in one place.
+</p>
+<p>
+  We help you find what to watch next by organizing content into clean categories,
+  real-time trending lists, and curated recommendations based on popularity and ratings.
+</p>
+<p>
+  Instead of endlessly scrolling through streaming platforms, MovieFlix helps you
+  quickly decide what to watch using structured recommendations and clean movie previews.
+</p>
+
+<h3> What You Can Do on MovieFlix</h3>
 
 
+  <li>Discover trending movies updated in real-time</li>
+  <li>Explore top-rated films across all genres</li>
+  <li>Watch official trailers instantly</li>
+  <li>Browse TV shows and movie collections</li>
+  <li>Search any movie of your choice</li>
 
-      </nav>
 
-      {/* HERO */}
+    </div>
+  </section>
+)}
+
+
+<div className="editor-picks">
+  <h3>Editor’s Picks</h3>
+
+  <div className="editor-grid">
+    {trending.slice(0, 3).map((movie) => (
+      <div key={movie.id} className="editor-card">
+
+        <img
+          src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+          alt={movie.title}
+          onClick={() => openMovie(movie)}
+        />
+
+        <div className="editor-info">
+          <h4>{movie.title}</h4>
+          <p>{movie.release_date?.slice(0, 4)}</p>
+
+          {/* ▶ TRAILER BUTTON */}
+          <button
+            className="editor-trailer-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              openTrailer(movie);
+            }}
+          >
+            ▶ Trailer
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+ 
+{/* HERO */}
 
 {mode === "movies" && (
   <section
@@ -442,7 +563,7 @@ const linkStyle = {
           className="btn play"
           onClick={() => openMovie(heroMovie)}
         >
-          ▶ Play
+          ▶ Details
         </button>
 
         <button
@@ -454,13 +575,20 @@ const linkStyle = {
       </div>
     </div>
   </section>
+
+ 
 )}
+
+
+
+
 
       {/* CONTENT */}
 
       {mode === "movies" ? (
         <>
           <MovieRow title="Trending Now" movies={trending} />
+        
           <AdBanner />
           <MovieRow title="Top Rated" movies={topRated} />
           <AdBanner />
@@ -509,13 +637,72 @@ const linkStyle = {
             />
 
             <div className="modal-text">
-              <h2>{selectedMovie.title || selectedMovie.name}</h2>
-              <p>{selectedMovie.overview}</p>
+  <h2>{selectedMovie.title || selectedMovie.name}</h2>
 
-              <button className="btn close" onClick={closeModal}>
-                Close
-              </button>
-            </div>
+  {/* ⭐ RATING */}
+  <p style={{ marginBottom: "10px", opacity: 0.9 }}>
+    ⭐ Rating: {movieDetails?.vote_average?.toFixed(1) || "N/A"} / 10
+  </p>
+
+  {/* 🎬 OVERVIEW */}
+  <p style={{ marginBottom: "15px" }}>
+    {movieDetails?.overview || selectedMovie.overview}
+  </p>
+
+    {/* 👥 CAST WITH PHOTOS */}
+
+<h3 style={{ marginTop: "15px", marginBottom: "10px" }}>
+  Cast
+</h3>
+
+<div
+  style={{
+    display: "flex",
+    gap: "12px",
+    overflowX: "auto",
+    paddingBottom: "10px",
+  }}
+>
+  {cast.map((actor) => (
+    <div
+      key={actor.id}
+      style={{
+        minWidth: "80px",
+        textAlign: "center",
+      }}
+    >
+      <img
+        src={
+          actor.profile_path
+            ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+            : "https://via.placeholder.com/80x120?text=No+Image"
+        }
+        alt={actor.name}
+        style={{
+          width: "80px",
+          height: "100px",
+          objectFit: "cover",
+          borderRadius: "10px",
+          marginBottom: "5px",
+        }}
+      />
+
+      <p style={{ fontSize: "11px", color: "#000000" }}>
+        {actor.name}
+      </p>
+
+      <p style={{ fontSize: "10px", opacity: 0.6 }}>
+        {actor.character}
+      </p>
+    </div>
+  ))}
+</div>
+
+       <button className="btn close" onClick={closeModal}>
+          Close
+        </button>
+       </div>
+            
           </div>
         </div>
       )}
