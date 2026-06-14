@@ -299,11 +299,8 @@ body {
   z-index: 2;
 }
 
-
-
-
-
 /* BUTTONS */
+
 .buttons {
   display: flex;
   gap: 12px;

@@ -38,6 +38,25 @@ function App() {
   37: "Western",
 };
 
+const TV_GENRES = {
+  10759: "Action & Adventure",
+  16: "Animation",
+  35: "Comedy",
+  80: "Crime",
+  99: "Documentary",
+  18: "Drama",
+  10751: "Family",
+  10762: "Kids",
+  9648: "Mystery",
+  10763: "News",
+  10764: "Reality",
+  10765: "Sci-Fi & Fantasy",
+  10766: "Soap",
+  10767: "Talk",
+  10768: "War & Politics",
+  37: "Western",
+};
+
 
 // helper function (reusable everywhere)
 const getGenreNames = (movie, limit = 2) => {
@@ -55,6 +74,25 @@ const getGenreNames = (movie, limit = 2) => {
 
   const [movieDetails, setMovieDetails] = useState(null);
   const [cast, setCast] = useState([]);
+
+
+  const [selectedGenre, setSelectedGenre] = useState("All");
+  const [showGenres, setShowGenres] = useState(false);
+
+  const [selectedMovieGenre, setSelectedMovieGenre] = useState("All");
+const [showMovieGenres, setShowMovieGenres] = useState(false);
+
+const [genreMovies, setGenreMovies] = useState([]);
+const [genreMoviePage, setGenreMoviePage] = useState(1);
+const [genreMovieLoading, setGenreMovieLoading] = useState(false);
+const [hasMoreGenreMovies, setHasMoreGenreMovies] = useState(true);
+
+
+const [genreTV, setGenreTV] = useState([]);
+const [genreTVPage, setGenreTVPage] = useState(1);
+const [hasMoreGenreTV, setHasMoreGenreTV] = useState(true);
+const [tvGenreLoading, setTvGenreLoading] = useState(false);
+
 
   const [trending, setTrending] = useState([]);
   const [topRated, setTopRated] = useState([]);
@@ -132,7 +170,17 @@ const getGenreNames = (movie, limit = 2) => {
     fetch(COMEDY_URL)
       .then((res) => res.json())
       .then((data) => setComedy(data.results || []));
+
+      fetch("https://api.themoviedb.org/3/person/popular?api_key=5397bbf0a2433675faec26633a785796")
+          .then((res) => res.json())
+          .then((data) => {
+        setComedyActors(data.results || []);
+      });
+
+
   }, []);
+
+
 
   // HERO ROTATION
   useEffect(() => {
@@ -159,7 +207,9 @@ const getGenreNames = (movie, limit = 2) => {
   const heroMovie = trending[heroIndex] || {};
 
   // LOAD MORE MOVIES
+
   const loadMoreMovies = async () => {
+    
     if (loading || !hasMore || mode !== "movies") return;
 
     setLoading(true);
@@ -189,8 +239,68 @@ const getGenreNames = (movie, limit = 2) => {
     setLoading(false);
   };
 
+
+  const loadMoreGenreMovies = async () => {
+  if (genreMovieLoading || !hasMoreGenreMovies || selectedMovieGenre === "All")
+    return;
+
+  setGenreMovieLoading(true);
+
+  const nextPage = genreMoviePage + 1;
+
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=5397bbf0a2433675faec26633a785796&with_genres=${selectedMovieGenre}&sort_by=popularity.desc&page=${nextPage}`
+    );
+
+    const data = await res.json();
+
+    if (!data.results?.length) {
+      setHasMoreGenreMovies(false);
+      return;
+    }
+
+    setGenreMovies((prev) => [...prev, ...data.results]);
+    setGenreMoviePage(nextPage);
+  } catch (err) {
+    console.error(err);
+  }
+
+  setGenreMovieLoading(false);
+};
+
+
+  const fetchMoviesByGenre = async (genreId, page = 1) => {
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=5397bbf0a2433675faec26633a785796&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`
+    );
+
+    const data = await res.json();
+
+    if (page === 1) {
+      setGenreMovies(data.results || []);
+    } else {
+      setGenreMovies((prev) => {
+  const existing = new Set(prev.map((m) => m.id));
+  const filtered = (data.results || []).filter((m) => !existing.has(m.id));
+  return [...prev, ...filtered];
+  });
+    }
+
+    if (!data.results || data.results.length === 0) {
+      setHasMoreGenreMovies(false);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+  ;
+
   // LOAD MORE TV SHOWS
+
   const loadMoreTV = async () => {
+
     if (tvLoading || !hasMoreTV || mode !== "tv") return;
 
     setTvLoading(true);
@@ -220,6 +330,45 @@ const getGenreNames = (movie, limit = 2) => {
     setTvLoading(false);
   };
 
+  const loadMoreGenreTV = async () => {
+  if (tvGenreLoading || !hasMoreGenreTV || selectedGenre === "All") return;
+
+  setTvGenreLoading(true);
+
+  const nextPage = genreTVPage + 1;
+
+  await fetchTVByGenre(selectedGenre, nextPage);
+
+  setGenreTVPage(nextPage);
+
+  setTvGenreLoading(false);
+};
+
+
+  {/* FETCH TV BY GENRE */}
+
+  const fetchTVByGenre = async (genreId, page = 1) => {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/discover/tv?api_key=5397bbf0a2433675faec26633a785796&with_genres=${genreId}&page=${page}`
+  );
+
+  const data = await res.json();
+
+  if (page === 1) {
+    setGenreTV(data.results || []);
+  } else {
+    setGenreTV((prev) => {
+  const existing = new Set(prev.map((t) => t.id));
+  const filtered = (data.results || []).filter((t) => !existing.has(t.id));
+  return [...prev, ...filtered];
+});
+  }
+
+  if (!data.results || data.results.length === 0) {
+    setHasMoreGenreTV(false);
+  }
+};
+
   // INITIAL LOAD
   useEffect(() => {
     loadMoreMovies();
@@ -235,8 +384,21 @@ const getGenreNames = (movie, limit = 2) => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        if (mode === "movies") loadMoreMovies();
-        if (mode === "tv") loadMoreTV();
+        if (mode === "movies") {
+  if (selectedMovieGenre === "All") {
+    loadMoreMovies();
+  } else {
+    loadMoreGenreMovies();
+  }
+}
+
+if (mode === "tv") {
+  if (selectedGenre === "All") {
+    loadMoreTV();
+  } else {
+    loadMoreGenreTV();
+  }
+}
       }
     });
 
@@ -355,6 +517,29 @@ const linkStyle = {
 
 
 
+const filteredTV =
+  selectedGenre === "All"
+    ? feedTV
+    : feedTV.filter((show) =>
+        show.genre_ids?.includes(Number(selectedGenre))
+      );
+
+
+const filteredMovies =
+  selectedMovieGenre === "All"
+    ? feedMovies
+    : feedMovies.filter((movie) =>
+        movie.genre_ids?.includes(Number(selectedMovieGenre))
+      );
+
+const selectedMovieGenreName =
+  selectedMovieGenre === "All"
+    ? "Popular Movies"
+    : GENRES[selectedMovieGenre];
+
+
+
+
   return (
     <div className="app">
 
@@ -383,6 +568,89 @@ const linkStyle = {
           TV Shows
         </button>
 
+
+        {/*TV SHOWS GENRE BUTTON*/}
+
+        {mode === "tv" && (
+  <div style={{ position: "relative" }}>
+    <button
+      onClick={() => setShowGenres(!showGenres)}
+      style={{
+        marginLeft: "10px",
+        background: "transparent",
+        color: "white",
+        border: "1px solid #e50914",
+        padding: "6px 12px",
+        borderRadius: "20px",
+        cursor: "pointer",
+      }}
+    >
+      Genres
+    </button>
+
+    {showGenres && (
+  <div
+    style={{
+      position: "absolute",
+      top: "45px",
+      left: 0,
+
+      minWidth: "220px",
+      maxHeight: "300px",      // height limit
+      overflowY: "auto",       // enables scrolling
+
+      background: "rgba(0, 0, 0, 0.75)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+
+      border: "1px solid rgba(229, 9, 20, 0.4)",
+      borderRadius: "12px",
+
+      boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+
+      zIndex: 9999,
+    }}
+  >
+        <div
+          style={{ padding: "10px", cursor: "pointer" }}
+          onClick={() => {
+             setSelectedGenre("All");
+             setShowGenres(false);
+
+              setGenreTV([]);
+              setGenreTVPage(1);
+              setHasMoreGenreTV(true);
+            }}
+        >
+          All Genres
+        </div>
+
+        {Object.entries(TV_GENRES).map(([id, name]) => (
+          <div
+            key={id}
+            style={{ padding: "10px", cursor: "pointer" }}
+            onClick={() => {
+  setSelectedGenre(id);
+  setShowGenres(false);
+
+  setGenreTV([]);
+  setGenreTVPage(1);
+  setHasMoreGenreTV(true);
+
+  fetchTVByGenre(id, 1);
+}}
+          >
+            {name}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}
+
+
+{/*MOVIES BUTTON */}
+
         <button
           onClick={() => setMode("movies")}
           style={{
@@ -397,6 +665,99 @@ const linkStyle = {
         >
           Movies
         </button>
+
+
+{mode === "movies" && (
+  <div style={{ position: "relative" }}>
+    <button
+      onClick={() => setShowMovieGenres(!showMovieGenres)}
+      style={{
+        marginLeft: "10px",
+        background: "transparent",
+        color: "white",
+        border: "1px solid #e50914",
+        padding: "6px 12px",
+        borderRadius: "20px",
+        cursor: "pointer",
+      }}
+    >
+      Genres
+    </button>
+
+    {showMovieGenres && (
+      <div
+        className="genre-dropdown"
+        style={{
+          position: "absolute",
+          top: "45px",
+          left: 0,
+
+          minWidth: "220px",
+          maxHeight: "300px",
+          overflowY: "auto",
+
+          background: "rgba(0, 0, 0, 0.75)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+
+          border: "1px solid rgba(229,9,20,0.4)",
+          borderRadius: "12px",
+
+          boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+          zIndex: 9999,
+        }}
+      >
+        <div
+          style={{
+            padding: "12px 16px",
+            cursor: "pointer",
+            color: "white",
+          }}
+          
+          onClick={() => {
+             setSelectedMovieGenre("All");
+             setGenreMovies([]);
+             setShowMovieGenres(false);
+           }}
+
+
+          >
+          All Genres
+        </div>
+
+        {Object.entries(GENRES).map(([id, name]) => (
+          <div
+            key={id}
+            style={{
+              padding: "12px 16px",
+              cursor: "pointer",
+              color: "white",
+            }}
+            onClick={() => {
+  setSelectedMovieGenre(id);
+  setShowMovieGenres(false);
+
+  // RESET PAGINATION
+  setGenreMoviePage(1);
+  setHasMoreGenreMovies(true);
+
+  // CLEAR OLD DATA FIRST
+  setGenreMovies([]);
+
+  // FETCH FIRST PAGE
+  if (id !== "All") {
+    fetchMoviesByGenre(id, 1);
+  }
+}}
+
+          >
+            {name}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}
 
  <input
   className="search-bar"
@@ -587,36 +948,91 @@ const linkStyle = {
 
       {mode === "movies" ? (
         <>
-          <MovieRow title="Trending Now" movies={trending} />
-        
-          <AdBanner />
-          <MovieRow title="Top Rated" movies={topRated} />
-          <AdBanner />
-          <MovieRow title="Action Movies" movies={action} />
-          <AdBanner />
-          <MovieRow title="Comedy Movies" movies={comedy} />
-          <AdBanner />
+          <section>
+  <MovieRow title="Trending Now" movies={trending} />
+  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
+    Movies and shows trending globally right now.
+  </p>
+
+  <AdBanner />
+</section>
+
+          <section>
+  <MovieRow title="Top Rated" movies={topRated} />
+  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
+    Highly rated movies loved by audiences worldwide.
+  </p>
+
+  <AdBanner />
+</section>
+
+          <section>
+  <MovieRow title="Action Movies" movies={action} />
+  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
+    High-energy films packed with explosions, fights, and adrenaline.
+  </p>
+
+  <AdBanner />
+</section>
+
+         <section>
+
+       
+       <MovieRow title="Action Movies" movies={action} />
+<p>High-energy films packed with explosions, fights, and adrenaline.</p>
+<AdBanner />
+
+
+<MovieRow title="Comedy Movies" movies={comedy} />
+<p>Funny, entertaining movies to brighten your day.</p>
+
+<AdBanner />
+
+  <MovieRow title="Comedy Movies" movies={comedy} />
+  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
+    Funny, entertaining movies to brighten your day.
+  </p>
+
+  <AdBanner />
+</section>
 
           <section className="movie-row">
-            <h2>🔥 Popular Movies</h2>
 
-               <AdBanner />
+            <h2>
+               {selectedMovieGenre === "All"
+                 ? "🔥 Popular Movies"
+                 : `🎬 ${selectedMovieGenreName} Movies`}
+           </h2>
+           <p>Most popular movies based on global viewing trends and ratings.</p>
 
-            <div className="movie-feed">
-              {feedMovies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
-            </div>
+
+          <AdBanner />
+
+           <div className="movie-feed">
+           {(selectedMovieGenre === "All" ? feedMovies : genreMovies).map((movie) => (
+           <MovieCard key={movie.id} movie={movie} />
+            ))}
+           </div>
+
+
           </section>
         </>
       ) : (
+
+
+        ////////////////////
+
         <section className="movie-row">
+
           <h2>📺 Popular TV Shows</h2>
+          <p>Discover binge-worthy TV shows and trending series right now.</p>
           <div className="movie-feed">
-            {feedTV.map((show) => (
-              <MovieCard key={show.id} movie={show} isTV />
-            ))}
+            {(selectedGenre === "All" ? feedTV : genreTV).map((show) => (
+                <MovieCard key={show.id} movie={show} isTV />
+             ))
+            }
           </div>
+
         </section>
       )}
 
@@ -651,8 +1067,8 @@ const linkStyle = {
 
     {/* 👥 CAST WITH PHOTOS */}
 
-<h3 style={{ marginTop: "15px", marginBottom: "10px" }}>
-  Cast
+<h3 style={{ marginTop: "15px", marginBottom: "10px",color: "black", fontWeight: "400 "}}>
+  Top Billed Cast
 </h3>
 
 <div
@@ -661,6 +1077,7 @@ const linkStyle = {
     gap: "12px",
     overflowX: "auto",
     paddingBottom: "10px",
+    
   }}
 >
   {cast.map((actor) => (
@@ -669,6 +1086,7 @@ const linkStyle = {
       style={{
         minWidth: "80px",
         textAlign: "center",
+        
       }}
     >
       <img
