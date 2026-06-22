@@ -172,14 +172,16 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
     fetch(COMEDY_URL)
       .then((res) => res.json())
       .then((data) => setComedy(data.results || []));
+      
 
-      fetch("https://api.themoviedb.org/3/person/popular?api_key=5397bbf0a2433675faec26633a785796")
+      console.log("Trending period:", trendingPeriod);
+      fetch(`https://api.themoviedb.org/3/trending/movie/${trendingPeriod}?api_key=5397bbf0a2433675faec26633a785796`)
           .then((res) => res.json())
           .then((data) => {
-        setComedyActors(data.results || []);
+        
       });
 
-  }, []);
+  }, [trendingPeriod]);
 
 
 
@@ -538,7 +540,7 @@ const selectedMovieGenreName =
     ? "Popular Movies"
     : GENRES[selectedMovieGenre];
 
-
+{/* PART 2 STARTS HERE */}
 
 
   return (
@@ -685,6 +687,16 @@ const selectedMovieGenreName =
       Genres
     </button>
 
+
+
+
+
+    {/* PART 3 STATRS */}
+
+
+
+
+
     {showMovieGenres && (
       <div
         className="genre-dropdown"
@@ -782,16 +794,20 @@ const selectedMovieGenreName =
 
    
 
-     <div className="bg bg-1"
+    <div className="bg bg-1"
   style={{
-    backgroundImage: `url(https://image.tmdb.org/t/p/original${trending[heroIndex]?.backdrop_path})`,
+    backgroundImage: trending[heroIndex]?.backdrop_path
+      ? `url(https://image.tmdb.org/t/p/original${trending[heroIndex].backdrop_path})`
+      : `url(https://via.placeholder.com/1280x720)`,
     opacity: isFading ? 0 : 1,
   }}
 />
 
 <div className="bg bg-2"
   style={{
-    backgroundImage: `url(https://image.tmdb.org/t/p/original${trending[(heroIndex + 1) % trending.length]?.backdrop_path})`,
+    backgroundImage: trending[(heroIndex + 1) % trending.length]?.backdrop_path
+  ? `url(https://image.tmdb.org/t/p/original${trending[(heroIndex + 1) % trending.length].backdrop_path})`
+  : `url(https://via.placeholder.com/1280x720)`,
     opacity: isFading ? 1 : 0,
   }}
 />
@@ -973,7 +989,7 @@ const selectedMovieGenreName =
     </h2>
 
     <button
-      onClick={() => setTrendingPeriod("Today")}
+      onClick={() => setTrendingPeriod("day")}
       style={{
         padding: "6px 24px",
         borderRadius: "20px",
@@ -1043,7 +1059,7 @@ const selectedMovieGenreName =
 </div>
 
 <br/>
-           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"70px" }}>
+           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", marginLeft: "50px"}}>
                 Highly rated movies loved by audiences.From timeless classics to modern masterpieces, these are the movies with the best ratings worldwide.
            </p>
 
@@ -1150,7 +1166,7 @@ const selectedMovieGenreName =
       ) : (
 
 
-        ////////////////////
+        
 
         <section className="movie-row">
 

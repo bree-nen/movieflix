@@ -1,5 +1,3 @@
-
-
 export default function Terms() {
   return (
     <div style={styles.page}>

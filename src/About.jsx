@@ -1,5 +1,3 @@
-
-
 export default function About() {
   return (
     <div style={styles.page}>

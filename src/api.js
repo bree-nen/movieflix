@@ -1,5 +1,3 @@
-
-
 export const API_KEY = "5397bbf0a2433675faec26633a785796";
 
 export const TRENDING_URL =
