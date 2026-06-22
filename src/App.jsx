@@ -96,6 +96,8 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
 
   const [trending, setTrending] = useState([]);
   const [topRated, setTopRated] = useState([]);
+  const [trendingPeriod, setTrendingPeriod] = useState("day");
+
   const [action, setAction] = useState([]);
   const [comedy, setComedy] = useState([]);
 
@@ -156,8 +158,8 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
   // FETCH MOVIE DATA
   useEffect(() => {
     fetch(TRENDING_URL)
-      .then((res) => res.json())
-      .then((data) => setTrending(data.results || []));
+       .then((res) => res.json())
+       .then((data) => setTrending(data.results || []));
 
     fetch(TOP_RATED_URL)
       .then((res) => res.json())
@@ -176,7 +178,6 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
           .then((data) => {
         setComedyActors(data.results || []);
       });
-
 
   }, []);
 
@@ -823,6 +824,7 @@ const selectedMovieGenreName =
   <li>Watch official trailers instantly</li>
   <li>Browse TV shows and movie collections</li>
   <li>Search any movie of your choice</li>
+  <li>Click movieof your choice to get movie details along with the top billed cast</li>
 
 
     </div>
@@ -948,63 +950,191 @@ const selectedMovieGenreName =
 
       {mode === "movies" ? (
         <>
-          <section>
-  <MovieRow title="Trending Now" movies={trending} />
-  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
-    Movies and shows trending globally right now.
+
+
+      <section>
+
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      marginBottom: "10px",
+    }}
+  >
+    <h2 style={{ 
+      margin: 0,
+       color:"white",
+       marginTop: "25px",
+       paddingLeft: "100px"      
+       }}>
+         Trending
+         
+    </h2>
+
+    <button
+      onClick={() => setTrendingPeriod("Today")}
+      style={{
+        padding: "6px 24px",
+        borderRadius: "20px",
+        border: "1px solid #e32d2d",
+        background:
+          trendingPeriod === "day" ? "#e50914" : "transparent",
+        color: "white",
+        cursor: "pointer",
+        marginTop: "25px ",
+         
+      }}
+    >
+      Today
+    </button>
+
+    <button
+      onClick={() => setTrendingPeriod("week")}
+      style={{
+        padding: "6px 24px",
+        borderRadius: "20px",
+        border: "1px solid #e32d2d",
+        background:
+          trendingPeriod === "week" ? "#e50914" : "transparent",
+        color: "white",
+        cursor: "pointer",
+        marginTop: "25px ",
+      }}
+    >
+      This Week
+    </button>
+  </div>
+
+<br/>
+
+  <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingRight:"80px" }}>
+  Movies and shows trending globally right now.
+  Updated daily and weekly based on what people are watching.
   </p>
+
+  <MovieRow title="" movies={trending} />
+
+
 
   <AdBanner />
 </section>
 
-          <section>
-  <MovieRow title="Top Rated" movies={topRated} />
-  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
-    Highly rated movies loved by audiences worldwide.
-  </p>
+  
+<section>
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      marginBottom: "10px",
+    }}
+  >
 
-  <AdBanner />
-</section>
+         <h2 style={{ 
+                 margin: 0,
+                 color:"red",
+                 marginTop: "25px",
+                 paddingLeft: "100px"      
+               }}>
+               Top Rated
+         
+        </h2>
+</div>
 
-          <section>
-  <MovieRow title="Action Movies" movies={action} />
-  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
-    High-energy films packed with explosions, fights, and adrenaline.
-  </p>
+<br/>
+           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"70px" }}>
+                Highly rated movies loved by audiences.From timeless classics to modern masterpieces, these are the movies with the best ratings worldwide.
+           </p>
 
-  <AdBanner />
-</section>
+       <MovieRow title="" movies={topRated} />
+  
+            <AdBanner />
+         </section>
+
+<section>
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      marginBottom: "10px",
+    }}
+  >
+
+         <h2 style={{ 
+                 margin: 0,
+                 color:"red",
+                 marginTop: "25px",
+                 paddingLeft: "100px"      
+               }}>
+               Action Movies
+         
+        </h2>
+</div>
+
+<br/>
+           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"70px" }}>
+                Dive into a world of explosive action, intense combat, high-stakes missions, and adrenaline-fueled adventures featuring some of cinema's biggest heroes and villains.
+           </p>
+
+       <MovieRow title="" movies={action} />
+  
+            <AdBanner />
+         </section>
 
          <section>
 
-       
-       <MovieRow title="Action Movies" movies={action} />
-<p>High-energy films packed with explosions, fights, and adrenaline.</p>
-<AdBanner />
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      marginBottom: "10px",
+    }}
+  >
 
+         <h2 style={{ 
+                 margin: 0,
+                 color:"red",
+                 marginTop: "25px",
+                 paddingLeft: "100px"      
+               }}>
+               Comedy Movies
+         
+        </h2>
+</div>
 
-<MovieRow title="Comedy Movies" movies={comedy} />
-<p>Funny, entertaining movies to brighten your day.</p>
+<br/>
+           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"54px" }}>
+                From clever jokes to outrageous adventures, these comedy favorites are guaranteed to bring smiles, laughter, and plenty of entertainment.
+           </p>
 
-<AdBanner />
+       <MovieRow title="" movies={comedy} />
+  
+            <AdBanner />
+         </section>     
 
-  <MovieRow title="Comedy Movies" movies={comedy} />
-  <p style={{ opacity: 0.7, fontSize: "13px", marginTop: "-8px" }}>
-    Funny, entertaining movies to brighten your day.
-  </p>
-
-  <AdBanner />
-</section>
+        
 
           <section className="movie-row">
 
-            <h2>
+            <h2  style={{ 
+                 margin: 0,
+                 color:"red",
+                 marginTop: "25px",
+                 paddingLeft: "100px"      
+               }}>
+            
                {selectedMovieGenre === "All"
-                 ? "🔥 Popular Movies"
+                 ? "All Popular Movies Of All Times"
                  : `🎬 ${selectedMovieGenreName} Movies`}
            </h2>
-           <p>Most popular movies based on global viewing trends and ratings.</p>
-
+           <br/>
+           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"50px" }}
+           >Discover the movies everyone is talking about, from blockbuster hits to fan favorites that are capturing audiences around the world.
+            Discover stories that define modern storytelling and continue to resonate with viewers around the world.</p>
+           <p style={{ color: "red"}}> Discover stories that have defined cinema and stood the test of time.</p>
 
           <AdBanner />
 
@@ -1024,8 +1154,31 @@ const selectedMovieGenreName =
 
         <section className="movie-row">
 
-          <h2>📺 Popular TV Shows</h2>
-          <p>Discover binge-worthy TV shows and trending series right now.</p>
+          <h2 style={{ 
+                 margin: 0,
+                 color:"red",
+                 fontSize:"42px",
+                 marginTop: "25px",
+                 paddingLeft: "100px"      
+               }}>
+
+         Popular TV Shows</h2>
+
+
+          <p style={{ opacity: 0.7, fontSize: "16px", lineHeight: "1.5" }}>
+               Discover the most popular TV shows that audiences around the world are currently watching and discussing.  
+            From gripping dramas and thrilling mysteries to light-hearted comedies, these series define today’s entertainment trends.  
+            Stay up to date with binge-worthy stories, unforgettable characters, and episodes that keep viewers hooked from start to finish.  
+             Explore shows that dominate streaming platforms and continue to grow in popularity every day.
+          </p>
+
+         <div style={{ opacity: 0.7, fontSize: "16px", lineHeight: "1.6", marginTop: "10px" }}>
+  ⭐ Binge-worthy series across all genres<br />
+  ⭐ Trending shows watched worldwide<br />
+  ⭐ Memorable characters and storylines<br />
+  ⭐ Constantly updated with new popular titles<br />
+  ⭐ Addictive episodes that keep you watching late into the night
+</div>
           <div className="movie-feed">
             {(selectedGenre === "All" ? feedTV : genreTV).map((show) => (
                 <MovieCard key={show.id} movie={show} isTV />
