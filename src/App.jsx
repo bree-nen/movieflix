@@ -540,6 +540,7 @@ const selectedMovieGenreName =
     ? "Popular Movies"
     : GENRES[selectedMovieGenre];
 
+
 {/* PART 2 STARTS HERE */}
 
 
@@ -549,6 +550,7 @@ const selectedMovieGenreName =
       {/* NAVBAR */}
 
       <nav className="navbar">
+
         <h1
           className="logo"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -583,7 +585,7 @@ const selectedMovieGenreName =
         background: "transparent",
         color: "white",
         border: "1px solid #e50914",
-        padding: "6px 12px",
+        padding: "6px 6px",
         borderRadius: "20px",
         cursor: "pointer",
       }}
@@ -679,22 +681,13 @@ const selectedMovieGenreName =
         background: "transparent",
         color: "white",
         border: "1px solid #e50914",
-        padding: "6px 12px",
+        padding: "6px 6px",
         borderRadius: "20px",
         cursor: "pointer",
       }}
     >
       Genres
     </button>
-
-
-
-
-
-    {/* PART 3 STATRS */}
-
-
-
 
 
     {showMovieGenres && (
@@ -781,10 +774,11 @@ const selectedMovieGenreName =
 
 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
- 
-
   </div>
 </nav> 
+
+
+{/*PART 3 STARTS */}
 
 {/* HOMEPAGE CONTENT FOR ADSENSE */}
 
@@ -840,7 +834,7 @@ const selectedMovieGenreName =
   <li>Watch official trailers instantly</li>
   <li>Browse TV shows and movie collections</li>
   <li>Search any movie of your choice</li>
-  <li>Click movieof your choice to get movie details along with the top billed cast</li>
+  <li>Click movie of your choice to get movie details, ratings and the the top billed cast</li>
 
 
     </div>
@@ -1274,11 +1268,11 @@ const selectedMovieGenreName =
         }}
       />
 
-      <p style={{ fontSize: "11px", color: "#000000" }}>
+      <p style={{ fontSize: "13px", color: "#000000" }}>
         {actor.name}
       </p>
 
-      <p style={{ fontSize: "10px", opacity: 0.6 }}>
+      <p style={{ fontSize: "12px", opacity: 0.6, color: "violet" }}>
         {actor.character}
       </p>
     </div>

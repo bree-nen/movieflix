@@ -47,6 +47,7 @@
   margin: 0 auto;
   text-align: center;
   border-inline: 1px solid var(--border);
+  border-color: #e50914;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
