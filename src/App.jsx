@@ -1,5 +1,3 @@
-
-
 import { Link } from "react-router-dom";
 
 import { useEffect, useState, useRef } from "react";
@@ -297,8 +295,7 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
   } catch (err) {
     console.error(err);
   }
-}
-  ;
+};
 
   // LOAD MORE TV SHOWS
 
@@ -472,8 +469,6 @@ if (mode === "tv") {
   );
 
 
-
-
   const AdBanner = ({ label = "Advertisement" }) => (
   <div
     style={{
@@ -516,8 +511,6 @@ const linkStyle = {
   fontSize: "14px",
   transition: "0.2s ease",
 };
-
-
 
 
 const filteredTV =
@@ -568,6 +561,7 @@ const selectedMovieGenreName =
             padding: "6px 12px",
             borderRadius: "20px",
             cursor: "pointer",
+            width: "min(90vw, 500px)" 
           }}
         >
           TV Shows
@@ -612,7 +606,7 @@ const selectedMovieGenreName =
       borderRadius: "12px",
 
       boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-
+      
       zIndex: 9999,
     }}
   >
@@ -663,9 +657,10 @@ const selectedMovieGenreName =
             background: mode === "movies" ? "#e50914" : "transparent",
             color: "white",
             border: "1px solid #e50914",
-            padding: "6px 12px",
+            padding: "6px 6px",
             borderRadius: "20px",
             cursor: "pointer",
+            width: "min(90vw, 500px)",
           }}
         >
           Movies
@@ -681,7 +676,7 @@ const selectedMovieGenreName =
         background: "transparent",
         color: "white",
         border: "1px solid #e50914",
-        padding: "6px 6px",
+        padding: "6px 12px",
         borderRadius: "20px",
         cursor: "pointer",
       }}
@@ -772,9 +767,10 @@ const selectedMovieGenreName =
   placeholder="Search..."
 />
 
-<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+<div style={{ display: "flex", alignItems: "center", gap: "10px"}}>
 
   </div>
+  
 </nav> 
 
 
@@ -786,7 +782,7 @@ const selectedMovieGenreName =
 
   <section className="hero-section">
 
-   
+  
 
     <div className="bg bg-1"
   style={{
@@ -797,6 +793,8 @@ const selectedMovieGenreName =
   }}
 />
 
+
+
 <div className="bg bg-2"
   style={{
     backgroundImage: trending[(heroIndex + 1) % trending.length]?.backdrop_path
@@ -806,12 +804,13 @@ const selectedMovieGenreName =
   }}
 />
 
+
+
  <div className="hero-content">
 
-
-    <h1>
-     Discover Movies & TV Shows Like Never Before
-    </h1>
+<h1>
+  Discover Movies & TV Shows Like Never Before
+</h1>
 
 <p>
   Welcome to MovieFlix — your personalized streaming discovery platform.
@@ -1168,21 +1167,21 @@ const selectedMovieGenreName =
                  margin: 0,
                  color:"red",
                  fontSize:"42px",
-                 marginTop: "25px",
+                 marginTop: "2px",
                  paddingLeft: "100px"      
                }}>
 
          Popular TV Shows</h2>
 
 
-          <p style={{ opacity: 0.7, fontSize: "16px", lineHeight: "1.5" }}>
+          <p style={{ opacity: 0.7, fontSize: "18px", lineHeight: "1.5", marginTop: "12px" }}>
                Discover the most popular TV shows that audiences around the world are currently watching and discussing.  
             From gripping dramas and thrilling mysteries to light-hearted comedies, these series define today’s entertainment trends.  
             Stay up to date with binge-worthy stories, unforgettable characters, and episodes that keep viewers hooked from start to finish.  
              Explore shows that dominate streaming platforms and continue to grow in popularity every day.
           </p>
 
-         <div style={{ opacity: 0.7, fontSize: "16px", lineHeight: "1.6", marginTop: "10px" }}>
+         <div style={{ opacity: 0.7, fontSize: "18px", lineHeight: "1.6", marginTop: "12px" }}>
   ⭐ Binge-worthy series across all genres<br />
   ⭐ Trending shows watched worldwide<br />
   ⭐ Memorable characters and storylines<br />
