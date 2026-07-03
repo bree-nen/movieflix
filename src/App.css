@@ -113,7 +113,7 @@ body {
 .navbar {
   display: flex;
   flex-wrap: nowrap;
-  gap: 10px;
+  gap: 5px;
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
@@ -155,10 +155,19 @@ body {
 }
 */
 
+.desktop-only {
+display: inline-block;
+}
+/* Hide on screens 768px or smaller */
+@media(max-width: 768px){
+  .desktop-only{
+    display: none;
+  }
+}
 
 @media (max-width: 768px) {
   .search-bar {
-    width: 140px;
+    display: none;
   }
 }
 
@@ -180,7 +189,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s ease;
-  padding-left: 2px;
+  padding-left: 0;
 }
 
 .logo:hover {
@@ -216,6 +225,7 @@ body {
     width: 40%;
     padding: 8px;
     font-size: 14px;
+    padding-left: 50px;
   }
 
 

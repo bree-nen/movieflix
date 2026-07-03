@@ -558,7 +558,7 @@ const selectedMovieGenreName =
             background: mode === "tv" ? "#e50914" : "transparent",
             color: "white",
             border: "1px solid #e50914",
-            padding: "6px 12px",
+            padding: "6px 6px",
             borderRadius: "20px",
             cursor: "pointer",
             width: "min(90vw, 500px)" 
@@ -582,7 +582,9 @@ const selectedMovieGenreName =
         padding: "6px 6px",
         borderRadius: "20px",
         cursor: "pointer",
+        minWidth: "80px ",
       }}
+      class="desktop-only"
     >
       Genres
     </button>
@@ -653,7 +655,7 @@ const selectedMovieGenreName =
         <button
           onClick={() => setMode("movies")}
           style={{
-            marginLeft: "10px",
+            marginLeft: "0",
             background: mode === "movies" ? "#e50914" : "transparent",
             color: "white",
             border: "1px solid #e50914",
@@ -676,13 +678,15 @@ const selectedMovieGenreName =
         background: "transparent",
         color: "white",
         border: "1px solid #e50914",
-        padding: "6px 12px",
+        padding: "6px 6px",
         borderRadius: "20px",
         cursor: "pointer",
+        minWidth: "80px",
       }}
+      class="desktop-only"
     >
       Genres
-    </button>
+    </button> 
 
 
     {showMovieGenres && (
