@@ -348,6 +348,10 @@ display: inline-block;
   max-width: 900px;
 }
 
+.hero-section li {
+  list-style: none;
+  margin-bottom: 10px;
+}
 /* BACKGROUND LAYERS */
 
 .bg {
