@@ -998,6 +998,7 @@ const selectedMovieGenreName =
         marginTop: "25px ",
          
       }}
+    class="desktop-only"
     >
       Today
     </button>
@@ -1014,6 +1015,7 @@ const selectedMovieGenreName =
         cursor: "pointer",
         marginTop: "25px ",
       }}
+      class="desktop-only"
     >
       This Week
     </button>
