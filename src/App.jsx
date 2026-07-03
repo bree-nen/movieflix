@@ -1169,25 +1169,25 @@ const selectedMovieGenreName =
                  color:"red",
                  fontSize:"42px",
                  marginTop: "2px",
-                 paddingLeft: "100px"      
+                 paddingLeft: "50px"      
                }}>
 
          Popular TV Shows</h2>
 
 
-          <p style={{ opacity: 0.7, fontSize: "18px", lineHeight: "1.5", marginTop: "12px" }}>
+          <p style={{ opacity: 0.7, fontSize: "18px", lineHeight: "2.1", marginTop: "12px" }}>
                Discover the most popular TV shows that audiences around the world are currently watching and discussing.  
             From gripping dramas and thrilling mysteries to light-hearted comedies, these series define today’s entertainment trends.  
             Stay up to date with binge-worthy stories, unforgettable characters, and episodes that keep viewers hooked from start to finish.  
              Explore shows that dominate streaming platforms and continue to grow in popularity every day.
           </p>
 
-         <div style={{ opacity: 0.7, fontSize: "18px", lineHeight: "1.6", marginTop: "12px" }}>
-  ⭐ Binge-worthy series across all genres<br />
-  ⭐ Trending shows watched worldwide<br />
-  ⭐ Memorable characters and storylines<br />
-  ⭐ Constantly updated with new popular titles<br />
-  ⭐ Addictive episodes that keep you watching late into the night
+         <div style={{ opacity: 0.7, fontSize: "18px", lineHeight: "2.6", marginTop: "12px" }}>
+   Binge-worthy series across all genres<br />
+  Trending shows watched worldwide<br />
+  Memorable characters and storylines<br />
+  Constantly updated with new popular titles<br />
+  Addictive episodes that keep you watching late into the night
 </div>
           <div className="movie-feed">
             {(selectedGenre === "All" ? feedTV : genreTV).map((show) => (
