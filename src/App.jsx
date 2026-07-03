@@ -786,8 +786,6 @@ const selectedMovieGenreName =
 
   <section className="hero-section">
 
-  
-
     <div className="bg bg-1"
   style={{
     backgroundImage: trending[heroIndex]?.backdrop_path
@@ -797,8 +795,6 @@ const selectedMovieGenreName =
   }}
 />
 
-
-
 <div className="bg bg-2"
   style={{
     backgroundImage: trending[(heroIndex + 1) % trending.length]?.backdrop_path
@@ -807,7 +803,6 @@ const selectedMovieGenreName =
     opacity: isFading ? 1 : 0,
   }}
 />
-
 
 
  <div className="hero-content">
