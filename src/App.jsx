@@ -155,6 +155,7 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
 
   // FETCH MOVIE DATA
   useEffect(() => {
+
     fetch(TRENDING_URL)
        .then((res) => res.json())
        .then((data) => setTrending(data.results || []));
@@ -173,6 +174,7 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
       
 
       console.log("Trending period:", trendingPeriod);
+
       fetch(`https://api.themoviedb.org/3/trending/movie/${trendingPeriod}?api_key=5397bbf0a2433675faec26633a785796`)
           .then((res) => res.json())
           .then((data) => {
@@ -780,7 +782,7 @@ const selectedMovieGenreName =
 
 {/*PART 3 STARTS */}
 
-{/* HOMEPAGE CONTENT FOR ADSENSE */}
+{/* HOMEPAGE CONTENT */}
 
 {mode === "movies" && (
 
@@ -1027,7 +1029,8 @@ const selectedMovieGenreName =
 
 
 
-  <AdBanner />
+ {/*<AdBanner /> */} 
+
 </section>
 
   
@@ -1059,7 +1062,8 @@ const selectedMovieGenreName =
 
        <MovieRow title="" movies={topRated} />
   
-            <AdBanner />
+            {/*<AdBanner /> */} 
+
          </section>
 
 <section>
@@ -1090,7 +1094,9 @@ const selectedMovieGenreName =
 
        <MovieRow title="" movies={action} />
   
-            <AdBanner />
+           {/*<AdBanner /> */} 
+
+
          </section>
 
          <section>
@@ -1122,7 +1128,9 @@ const selectedMovieGenreName =
 
        <MovieRow title="" movies={comedy} />
   
-            <AdBanner />
+            {/*<AdBanner /> */} 
+
+
          </section>     
 
         
@@ -1146,7 +1154,7 @@ const selectedMovieGenreName =
             Discover stories that define modern storytelling and continue to resonate with viewers around the world.</p>
            <p style={{ color: "red"}}> Discover stories that have defined cinema and stood the test of time.</p>
 
-          <AdBanner />
+          {/*<AdBanner /> */} 
 
            <div className="movie-feed">
            {(selectedMovieGenre === "All" ? feedMovies : genreMovies).map((movie) => (
