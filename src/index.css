@@ -42,9 +42,9 @@
                           margin: 0; 
                         }
 #root {
-  width: 90%;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  /*margin: 0 auto; */
   text-align: center;
   border-inline: 1px solid var(--border);
   border-color: #e50914;

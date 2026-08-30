@@ -73,12 +73,19 @@ const getGenreNames = (movie, limit = 2) => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [cast, setCast] = useState([]);
 
+  const [reviews, setReviews] = useState([]);
+  const [expandedReview, setExpandedReview] = useState(null);
+
+  const [trailerKey, setTrailerKey] = useState(null);
+  const [trailerList, setTrailerList] = useState([]);
+  const [trailerIndex, setTrailerIndex] = useState(0);
+  const [showTrailer, setShowTrailer] = useState(false);
 
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [showGenres, setShowGenres] = useState(false);
 
   const [selectedMovieGenre, setSelectedMovieGenre] = useState("All");
-const [showMovieGenres, setShowMovieGenres] = useState(false);
+  const [showMovieGenres, setShowMovieGenres] = useState(false);
 
 const [genreMovies, setGenreMovies] = useState([]);
 const [genreMoviePage, setGenreMoviePage] = useState(1);
@@ -138,6 +145,16 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
     const creditsData = await creditsRes.json();
 
     setCast(creditsData.cast?.slice(0, 8) || []);
+    
+    // GET REVIEWS
+    const reviewsRes = await fetch(
+      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/reviews?api_key=5397bbf0a2433675faec26633a785796`
+    );
+
+    const reviewsData = await reviewsRes.json();
+
+    setReviews(reviewsData.results || []);
+
   } catch (err) {
     console.error(err);
   }
@@ -145,13 +162,59 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
 
   const closeModal = () => setSelectedMovie(null);
 
-  const openTrailer = (movie) => {
+  /* const openTrailer = (movie) => {
     const query = encodeURIComponent(`${movie.title} official trailer`);
     window.open(
       `https://www.youtube.com/results?search_query=${query}`,
       "_blank"
     );
   };
+*/
+
+const openTrailer = async (movie) => {
+  try {
+    const type = movie.first_air_date ? "tv" : "movie";
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${movie.id}/videos?api_key=5397bbf0a2433675faec26633a785796&language=en-US`
+    );
+
+    const data = await res.json();
+
+    const trailers = (data.results || [])
+      .filter(
+        (video) =>
+          video.site === "YouTube" &&
+          (video.type === "Trailer" || video.type === "Teaser") &&
+          video.key
+      )
+      .sort((a, b) => {
+        // Official trailers first
+        if (a.official && !b.official) return -1;
+        if (!a.official && b.official) return 1;
+
+        // Trailers before teasers
+        if (a.type === "Trailer" && b.type !== "Trailer") return -1;
+        if (a.type !== "Trailer" && b.type === "Trailer") return 1;
+
+        return 0;
+      });
+
+    if (trailers.length === 0) {
+      alert("Trailer not available.");
+      return;
+    }
+
+    setTrailerList(trailers);
+    setTrailerIndex(0);
+    setTrailerKey(trailers[0].key);
+    setShowTrailer(true);
+
+  } catch (error) {
+    console.error("Error fetching trailer:", error);
+    alert("Could not load trailer.");
+  }
+};
 
   // FETCH MOVIE DATA
   useEffect(() => {
@@ -780,6 +843,51 @@ const selectedMovieGenreName =
 </nav> 
 
 
+{showTrailer && trailerKey && (
+  <div className="trailer-modal">
+
+    <div className="trailer-content">
+
+      <button
+        className="trailer-close"
+        onClick={() => {
+          setShowTrailer(false);
+          setTrailerKey(null);
+          setTrailerList([]);
+          setTrailerIndex(0);
+        }}
+      >
+        ✕
+      </button>
+
+      <iframe
+        key={trailerKey}
+        width="100%"
+        height="500"
+        src={`https://www.youtube.com/embed/${trailerKey}`}
+        title="Movie Trailer"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
+        onError={() => {
+          const nextIndex = trailerIndex + 1;
+
+          if (nextIndex < trailerList.length) {
+            setTrailerIndex(nextIndex);
+            setTrailerKey(trailerList[nextIndex].key);
+          } else {
+            alert("No playable trailer was found.");
+            setShowTrailer(false);
+          }
+        }}
+      />
+
+    </div>
+
+  </div>
+)}
+
+
 {/*PART 3 STARTS */}
 
 {/* HOMEPAGE CONTENT */}
@@ -1209,92 +1317,245 @@ const selectedMovieGenreName =
 
       <div ref={loaderRef} style={{ height: "60px" }} />
 
-      {/* MODAL */}
 
-      {selectedMovie && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <img
-              src={
-                selectedMovie.poster_path
-                  ? `${IMAGE_BASE_URL}${selectedMovie.poster_path}`
-                  : "https://via.placeholder.com/300x450"
-              }
-              alt={selectedMovie.title || selectedMovie.name}
-            />
 
-            <div className="modal-text">
-  <h2>{selectedMovie.title || selectedMovie.name}</h2>
+      
 
-  {/* ⭐ RATING */}
-  <p style={{ marginBottom: "10px", opacity: 0.9 }}>
-    ⭐ Rating: {movieDetails?.vote_average?.toFixed(1) || "N/A"} / 10
-  </p>
 
-  {/* 🎬 OVERVIEW */}
-  <p style={{ marginBottom: "15px" }}>
-    {movieDetails?.overview || selectedMovie.overview}
-  </p>
+ {/* MODAL */}
 
-    {/* 👥 CAST WITH PHOTOS */}
+{selectedMovie && (
+  <div className="modal-overlay" onClick={closeModal}>
 
-<h3 style={{ marginTop: "15px", marginBottom: "10px",color: "black", fontWeight: "400 "}}>
-  Top Billed Cast
-</h3>
-
-<div
-  style={{
-    display: "flex",
-    gap: "12px",
-    overflowX: "auto",
-    paddingBottom: "10px",
-    
-  }}
->
-  {cast.map((actor) => (
     <div
-      key={actor.id}
-      style={{
-        minWidth: "80px",
-        textAlign: "center",
-        
-      }}
+      className="modal-content"
+      onClick={(e) => e.stopPropagation()}
     >
-      <img
-        src={
-          actor.profile_path
-            ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-            : "https://via.placeholder.com/80x120?text=No+Image"
-        }
-        alt={actor.name}
-        style={{
-          width: "80px",
-          height: "100px",
-          objectFit: "cover",
-          borderRadius: "10px",
-          marginBottom: "5px",
-        }}
-      />
 
-      <p style={{ fontSize: "13px", color: "#000000" }}>
-        {actor.name}
-      </p>
+      {/* MOVIE HEADER */}
 
-      <p style={{ fontSize: "12px", opacity: 0.6, color: "violet" }}>
-        {actor.character}
-      </p>
-    </div>
-  ))}
-</div>
+      <div className="movie-details-header">
 
-       <button className="btn close" onClick={closeModal}>
-          Close
-        </button>
-       </div>
-            
-          </div>
+        <img
+          className="movie-details-poster"
+          src={
+            selectedMovie.poster_path
+              ? `${IMAGE_BASE_URL}${selectedMovie.poster_path}`
+              : "https://via.placeholder.com/300x450"
+          }
+          alt={selectedMovie.title || selectedMovie.name}
+        />
+
+        <div className="movie-details-info">
+
+          <h2>
+            {selectedMovie.title || selectedMovie.name}
+          </h2>
+
+          {/* ⭐ RATING */}
+
+          <p className="movie-rating">
+            ⭐ Rating:{" "}
+            {movieDetails?.vote_average?.toFixed(1) || "N/A"} / 10
+          </p>
+
+          {/* 🎬 OVERVIEW */}
+
+          <p className="movie-overview">
+            {movieDetails?.overview || selectedMovie.overview}
+          </p>
+
         </div>
+
+      </div>
+
+
+      {/* 👥 CAST */}
+
+      <div className="cast-section">
+
+        <h3>Top Billed Cast</h3>
+
+        <div className="cast-container">
+
+          {cast.map((actor) => (
+
+            <div
+              key={actor.id}
+              className="cast-card"
+            >
+
+              <img
+                src={
+                  actor.profile_path
+                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                    : "https://via.placeholder.com/80x120?text=No+Image"
+                }
+                alt={actor.name}
+              />
+
+              <p className="cast-name">
+                {actor.name}
+              </p>
+
+              <p className="cast-character">
+                {actor.character}
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </div>
+
+
+      {/* ⭐ REVIEWS */}
+
+      <div className="reviews-section">
+
+        <div className="reviews-header">
+
+          <h3>⭐ Reviews</h3>
+
+          {reviews.length > 0 && (
+            <span>
+              {reviews.length} reviews
+            </span>
+          )}
+
+        </div>
+
+
+        {reviews.length > 0 ? (
+
+          <div className="reviews-container">
+
+            {reviews.slice(0, 5).map((review) => {
+
+  const content = review.content || "";
+  const isLong = content.length > 350;
+  const isExpanded = expandedReview === review.id;
+
+  return (
+
+    <div
+      className="review-card"
+      key={review.id}
+    >
+
+      {/* REVIEW HEADER */}
+
+      <div className="review-top">
+
+        <div className="reviewer">
+
+          <div className="review-avatar">
+            {review.author?.charAt(0)?.toUpperCase() || "U"}
+          </div>
+
+          <div>
+
+            <p className="review-author">
+              {review.author || "Anonymous"}
+            </p>
+
+            <p className="review-date">
+              {review.created_at
+                ? new Date(
+                    review.created_at
+                  ).toLocaleDateString()
+                : ""}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        {/* RATING */}
+
+        {review.author_details?.rating && (
+
+          <div className="review-rating">
+            ⭐ {review.author_details.rating}/10
+          </div>
+
+        )}
+
+      </div>
+
+
+      {/* REVIEW TEXT */}
+
+      <p className="review-content">
+
+        {isLong && !isExpanded
+          ? `${content.substring(0, 350)}...`
+          : content}
+
+      </p>
+
+
+      {/* READ MORE / SHOW LESS */}
+
+      {isLong && (
+
+        <button
+          className="read-review"
+          onClick={() =>
+            setExpandedReview(
+              isExpanded ? null : review.id
+            )
+          }
+        >
+          {isExpanded
+            ? "Show less ↑"
+            : "Read full review →"}
+        </button>
+
       )}
+
+    </div>
+
+  );
+
+})}
+
+          </div>
+
+        ) : (
+
+          <div className="no-reviews">
+
+            <span>💬</span>
+
+            <p>
+              No reviews available for this title yet.
+            </p>
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      {/* CLOSE */}
+
+      <button
+        className="btn close"
+        onClick={closeModal}
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+)}
+
 
 
        {/* FOOTER  */}
