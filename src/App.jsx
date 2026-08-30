@@ -76,6 +76,8 @@ const getGenreNames = (movie, limit = 2) => {
   const [reviews, setReviews] = useState([]);
   const [expandedReview, setExpandedReview] = useState(null);
 
+  const [recommendations, setRecommendations] = useState([]);
+
   const [trailerKey, setTrailerKey] = useState(null);
   const [trailerList, setTrailerList] = useState([]);
   const [trailerIndex, setTrailerIndex] = useState(0);
@@ -154,6 +156,17 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
     const reviewsData = await reviewsRes.json();
 
     setReviews(reviewsData.results || []);
+
+    // GET RECOMMENDATIONS
+    const recommendationsRes = await fetch(
+  `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/recommendations?api_key=5397bbf0a2433675faec26633a785796`
+   );
+
+    const recommendationsData = await recommendationsRes.json();
+
+  setRecommendations(
+  recommendationsData.results?.slice(0, 10) || []
+   );
 
   } catch (err) {
     console.error(err);
@@ -1365,6 +1378,16 @@ const selectedMovieGenreName =
             {movieDetails?.overview || selectedMovie.overview}
           </p>
 
+
+          {/* 🎥 WATCH TRAILER */}
+
+            <button
+              className="modal-trailer-btn"
+             onClick={() => openTrailer(selectedMovie)}
+              >
+              ▶ Watch Trailer
+            </button>
+
         </div>
 
       </div>
@@ -1540,7 +1563,51 @@ const selectedMovieGenreName =
         )}
 
       </div>
+        
+        {/* 🎬 YOU MIGHT ALSO LIKE */}
 
+{recommendations.length > 0 && (
+  <div className="recommendations-section">
+
+    <div className="recommendations-header">
+      <h3>You Might Also Like</h3>
+    </div>
+
+    <div className="recommendations-container">
+
+      {recommendations.map((recommendation) => (
+
+        <div
+          className="recommendation-card"
+          key={recommendation.id}
+          onClick={() => openMovie(recommendation)}
+        >
+
+          <img
+            src={
+              recommendation.poster_path
+                ? `${IMAGE_BASE_URL}${recommendation.poster_path}`
+                : "https://via.placeholder.com/300x450?text=No+Image"
+            }
+            alt={
+              recommendation.title ||
+              recommendation.name
+            }
+          />
+
+          <p>
+            {recommendation.title ||
+              recommendation.name}
+          </p>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+)}
 
       {/* CLOSE */}
 
