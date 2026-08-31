@@ -69,6 +69,10 @@ const getGenreNames = (movie, limit = 2) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null);
+{/*
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false); 
+  */}
 
   const [movieDetails, setMovieDetails] = useState(null);
   const [cast, setCast] = useState([]);
@@ -212,52 +216,8 @@ const openActor = async (actor) => {
 
   const closeModal = () => setSelectedMovie(null);
 
-/*
-const openTrailer = async (movie) => {
-  try {
-    const type = movie.first_air_date ? "tv" : "movie";
+  {/* TRAILER, TRAILER FALLBACK */}
 
-    const res = await fetch(
-      `https://api.themoviedb.org/3/${type}/${movie.id}/videos?api_key=5397bbf0a2433675faec26633a785796&language=en-US`
-    );
-
-    const data = await res.json();
-
-    const trailers = (data.results || [])
-      .filter(
-        (video) =>
-          video.site === "YouTube" &&
-          (video.type === "Trailer" || video.type === "Teaser") &&
-          video.key
-      )
-      .sort((a, b) => {
-        // Official trailers first
-        if (a.official && !b.official) return -1;
-        if (!a.official && b.official) return 1;
-
-        // Trailers before teasers
-        if (a.type === "Trailer" && b.type !== "Trailer") return -1;
-        if (a.type !== "Trailer" && b.type === "Trailer") return 1;
-
-        return 0;
-      });
-
-    if (trailers.length === 0) {
-      alert("Trailer not available.");
-      return;
-    }
-
-    setTrailerList(trailers);
-    setTrailerIndex(0);
-    setTrailerKey(trailers[0].key);
-    setShowTrailer(true);
-
-  } catch (error) {
-    console.error("Error fetching trailer:", error);
-    alert("Could not load trailer.");
-  }
- };
- */
 const openTrailer = async (movie) => {
   try {
     const type = movie.first_air_date ? "tv" : "movie";
@@ -302,13 +262,9 @@ const openTrailer = async (movie) => {
     if (sortedVideos.length > 0) {
 
       setTrailerList(sortedVideos);
-
       setTrailerIndex(0);
-
       setTrailerKey(sortedVideos[0].key);
-
       setShowTrailer(true);
-
       return;
     }
 
@@ -317,13 +273,9 @@ const openTrailer = async (movie) => {
     // Show MovieFlix fallback instead of alert
 
     setTrailerKey(null);
-
     setTrailerList([]);
-
     setTrailerIndex(0);
-
     setTrailerMovie(movie);
-
     setShowTrailer(true);
 
   } catch (error) {
@@ -333,16 +285,87 @@ const openTrailer = async (movie) => {
     // 🖼️ FALLBACK IF TMDB REQUEST FAILS
 
     setTrailerKey(null);
-
     setTrailerList([]);
-
     setTrailerIndex(0);
-
     setTrailerMovie(movie);
-
     setShowTrailer(true);
   }
 };
+
+
+
+const searchTMDB = async (query) => {
+  if (!query.trim()) {
+    setSearchResults([]);
+    setIsSearching(false);
+    return;
+  }
+
+  try {
+    setIsSearching(true);
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/multi?api_key=5397bbf0a2433675faec26633a785796&query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`
+    );
+
+    const data = await res.json();
+
+    setSearchResults(
+      (data.results || []).filter(
+        (item) =>
+          item.media_type === "movie" ||
+          item.media_type === "tv"
+      )
+    );
+
+  } catch (error) {
+    console.error("Search error:", error);
+    setSearchResults([]);
+  } finally {
+    setIsSearching(false);
+  }
+};
+
+
+
+
+{/*
+const searchTMDB = async (query) => {
+  const trimmedQuery = query.trim();
+
+  if (!trimmedQuery) {
+    setSearchResults([]);
+    setIsSearching(false);
+    return;
+  }
+
+  setIsSearching(true);
+
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/multi?api_key=5397bbf0a2433675faec26633a785796&query=${encodeURIComponent(trimmedQuery)}&include_adult=false&language=en-US&page=1`
+    );
+
+    const data = await res.json();
+
+    const results = (data.results || []).filter(
+      (item) =>
+        item.media_type === "movie" ||
+        item.media_type === "tv"
+    );
+
+    setSearchResults(results);
+
+  } catch (error) {
+    console.error("Search error:", error);
+    setSearchResults([]);
+
+  } finally {
+    setIsSearching(false);
+  }
+};
+
+*/}
 
   // FETCH MOVIE DATA
   useEffect(() => {
@@ -370,11 +393,19 @@ const openTrailer = async (movie) => {
           .then((res) => res.json())
           .then((data) => {
         
-      });
+      }); 
 
   }, [trendingPeriod]);
+{/*
+  useEffect(() => {
+  const delaySearch = setTimeout(() => {
+    searchTMDB(searchTerm);
+  }, 500);
 
+  return () => clearTimeout(delaySearch);
+}, [searchTerm]);
 
+*/}
 
   // HERO ROTATION
   useEffect(() => {
@@ -957,6 +988,9 @@ const selectedMovieGenreName =
   </div>
 )}
 
+{/*     SEARCH BAR     */}
+
+{/*
  <input
   className="search-bar"
   value={searchTerm}
@@ -967,54 +1001,34 @@ const selectedMovieGenreName =
 <div style={{ display: "flex", alignItems: "center", gap: "10px"}}>
 
   </div>
-  
+
+  */}
+
+  <div className="search-wrapper">
+
+  <span className="search-icon">🔎</span>
+
+  <input
+    className="search-bar"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Search movies & TV shows..."
+  />
+
+  {searchTerm && (
+    <button
+      className="search-clear"
+      onClick={() => setSearchTerm("")}
+      aria-label="Clear search"
+    >
+      ✕
+    </button>
+  )}
+
+</div>
+
 </nav> 
 
-{/*
- {showTrailer && trailerKey && (
-  <div className="trailer-modal">
-
-    <div className="trailer-content">
-
-      <button
-        className="trailer-close"
-        onClick={() => {
-          setShowTrailer(false);
-          setTrailerKey(null);
-          setTrailerList([]);
-          setTrailerIndex(0);
-        }}
-      >
-        ✕
-      </button>
-
-      <iframe
-        key={trailerKey}
-        width="100%"
-        height="500"
-        src={`https://www.youtube.com/embed/${trailerKey}`}
-        title="Movie Trailer"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
-        onError={() => {
-          const nextIndex = trailerIndex + 1;
-
-          if (nextIndex < trailerList.length) {
-            setTrailerIndex(nextIndex);
-            setTrailerKey(trailerList[nextIndex].key);
-          } else {
-            alert("No playable trailer was found.");
-            setShowTrailer(false);
-          }
-        }}
-      />
-
-    </div>
-
-  </div>
-)}
-*/}
 
 {showTrailer && (
   <div
@@ -1145,7 +1159,11 @@ const selectedMovieGenreName =
 
 {/* HOMEPAGE CONTENT */}
 
+
+
 {mode === "movies" && (
+
+
 
   <section className="hero-section">
 
@@ -1235,8 +1253,11 @@ const selectedMovieGenreName =
     ))}
   </div>
 </div>
- 
+
+  
+
 {/* HERO */}
+
 
 {mode === "movies" && (
   <section
@@ -1315,9 +1336,9 @@ const selectedMovieGenreName =
 
 
 
-
-
       {/* CONTENT */}
+
+
 
       {mode === "movies" ? (
         <>
@@ -1566,6 +1587,8 @@ const selectedMovieGenreName =
 
         </section>
       )}
+
+
 
       <div ref={loaderRef} style={{ height: "60px" }} />
 
