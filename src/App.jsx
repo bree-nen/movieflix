@@ -86,6 +86,8 @@ const getGenreNames = (movie, limit = 2) => {
   const [trailerIndex, setTrailerIndex] = useState(0);
   const [showTrailer, setShowTrailer] = useState(false);
 
+  const [trailerMovie, setTrailerMovie] = useState(null);
+
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [showGenres, setShowGenres] = useState(false);
 
@@ -210,15 +212,7 @@ const openActor = async (actor) => {
 
   const closeModal = () => setSelectedMovie(null);
 
-  /* const openTrailer = (movie) => {
-    const query = encodeURIComponent(`${movie.title} official trailer`);
-    window.open(
-      `https://www.youtube.com/results?search_query=${query}`,
-      "_blank"
-    );
-  };
-*/
-
+/*
 const openTrailer = async (movie) => {
   try {
     const type = movie.first_air_date ? "tv" : "movie";
@@ -261,6 +255,92 @@ const openTrailer = async (movie) => {
   } catch (error) {
     console.error("Error fetching trailer:", error);
     alert("Could not load trailer.");
+  }
+ };
+ */
+const openTrailer = async (movie) => {
+  try {
+    const type = movie.first_air_date ? "tv" : "movie";
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${movie.id}/videos?api_key=5397bbf0a2433675faec26633a785796&language=en-US`
+    );
+
+    const data = await res.json();
+
+    // 🎬 Get all usable YouTube videos
+    const videos = (data.results || [])
+      .filter(
+        (video) =>
+          video.site === "YouTube" &&
+          video.key
+      );
+
+    // 🎯 Preferred order
+    const priority = {
+      Trailer: 1,
+      Teaser: 2,
+      Clip: 3,
+      Featurette: 4,
+    };
+
+    const sortedVideos = videos.sort((a, b) => {
+
+      // Official videos first
+      if (a.official && !b.official) return -1;
+      if (!a.official && b.official) return 1;
+
+      // Then by video type
+      return (
+        (priority[a.type] || 99) -
+        (priority[b.type] || 99)
+      );
+    });
+
+
+    // 🎥 VIDEO FOUND
+    if (sortedVideos.length > 0) {
+
+      setTrailerList(sortedVideos);
+
+      setTrailerIndex(0);
+
+      setTrailerKey(sortedVideos[0].key);
+
+      setShowTrailer(true);
+
+      return;
+    }
+
+
+    // 🖼️ NO VIDEO FOUND
+    // Show MovieFlix fallback instead of alert
+
+    setTrailerKey(null);
+
+    setTrailerList([]);
+
+    setTrailerIndex(0);
+
+    setTrailerMovie(movie);
+
+    setShowTrailer(true);
+
+  } catch (error) {
+
+    console.error("Error fetching trailer:", error);
+
+    // 🖼️ FALLBACK IF TMDB REQUEST FAILS
+
+    setTrailerKey(null);
+
+    setTrailerList([]);
+
+    setTrailerIndex(0);
+
+    setTrailerMovie(movie);
+
+    setShowTrailer(true);
   }
 };
 
@@ -890,8 +970,8 @@ const selectedMovieGenreName =
   
 </nav> 
 
-
-{showTrailer && trailerKey && (
+{/*
+ {showTrailer && trailerKey && (
   <div className="trailer-modal">
 
     <div className="trailer-content">
@@ -934,7 +1014,132 @@ const selectedMovieGenreName =
 
   </div>
 )}
+*/}
 
+{showTrailer && (
+  <div
+    className="trailer-modal"
+    onClick={() => {
+      setShowTrailer(false);
+      setTrailerKey(null);
+      setTrailerList([]);
+      setTrailerIndex(0);
+      setTrailerMovie(null);
+    }}
+  >
+
+    <div
+      className="trailer-content"
+      onClick={(e) => e.stopPropagation()}
+    >
+
+      {/* CLOSE BUTTON */}
+
+      <button
+        className="trailer-close"
+        onClick={() => {
+          setShowTrailer(false);
+          setTrailerKey(null);
+          setTrailerList([]);
+          setTrailerIndex(0);
+          setTrailerMovie(null);
+        }}
+      >
+        ✕
+      </button>
+
+
+      {/* 🎬 TRAILER */}
+
+      {trailerKey ? (
+
+        <iframe
+          key={trailerKey}
+          width="100%"
+          height="500"
+          src={`https://www.youtube.com/embed/${trailerKey}`}
+          title="Movie Trailer"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          onError={() => {
+
+            const nextIndex = trailerIndex + 1;
+
+            if (nextIndex < trailerList.length) {
+
+              setTrailerIndex(nextIndex);
+              setTrailerKey(trailerList[nextIndex].key);
+
+            } else {
+
+              setTrailerKey(null);
+
+            }
+
+          }}
+        />
+
+      ) : (
+
+        /* 🖼️ NO TRAILER FALLBACK */
+
+        <div
+          className="trailer-fallback"
+          style={{
+            backgroundImage: trailerMovie?.backdrop_path
+              ? `linear-gradient(
+                  rgba(0,0,0,0.45),
+                  rgba(0,0,0,0.9)
+                ),
+                url(https://image.tmdb.org/t/p/w1280${trailerMovie.backdrop_path})`
+              : "none"
+          }}
+        >
+
+          <div className="trailer-fallback-content">
+
+            <div className="fallback-icon">
+              🎬
+            </div>
+
+            <h2>
+              Trailer Unavailable
+            </h2>
+
+            <p>
+              {trailerMovie?.title ||
+                trailerMovie?.name ||
+                "This title"}
+            </p>
+
+            <span>
+              We couldn't find a playable trailer for this title right now.
+            </span>
+
+            <button
+              className="fallback-close"
+              onClick={() => {
+                setShowTrailer(false);
+                setTrailerKey(null);
+                setTrailerList([]);
+                setTrailerIndex(0);
+                setTrailerMovie(null);
+              }}
+            >
+              Continue Browsing
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+
+  </div>
+)}
 
 {/*PART 3 STARTS */}
 
