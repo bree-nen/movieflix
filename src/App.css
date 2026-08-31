@@ -108,30 +108,24 @@ body {
 }
 
 
-/* NAVBAR (TRANSPARENT BUT CLEAR) */
+/* NAV */
 
 .navbar {
   display: flex;
   flex-wrap: nowrap;
   gap: 5px;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 10px 30px;
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 100;
-
   overflow-x: visible;
   overflow-y: visible;
-
   white-space: nowrap;
-
   -webkit-overflow-scrolling: touch;
-
   scrollbar-width: none; /* Firefox */
-
-  
 
   /* transparent glass-like look */
 
@@ -148,10 +142,29 @@ body {
   backdrop-filter: none;
 }
 
+.navbar > button,
+.navbar > div > button,
+.watchlist-nav {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.navbar > button,
+.navbar > div > button {
+  margin-left: 5px !important;
+}
+
+.watchlist-nav {
+  margin-left: 5px !important;
+}
+
 .desktop-only {
 display: inline-block;
 }
+
 /* Hide on screens 768px or smaller */
+
 @media(max-width: 768px){
   .desktop-only{
     display: none;
@@ -199,19 +212,8 @@ display: inline-block;
 } 
 */
 
-/* SEARCH */
 
-/*
-.search-bar {
-  padding: 8px 12px;
-  border-radius: 20px;
-  border-color: #e50914;
-  outline: none;
-  width: min(90vw, 500px); 
-  background: #222;
-  color: rgb(255, 255, 255);
-}
-*/
+
 
 @media (max-width: 768px) {
   .search-bar {
@@ -222,16 +224,17 @@ display: inline-block;
   }
 }
 
-
-
-/*  SEARCH BAR    */
+/* SEARCH BAR/ WRAPPER */
 
 .search-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  width: 280px;
-  margin-left: 15px;
+
+  margin-left: auto;
+  width: 200px;
+  max-width: 200px;
+  flex-shrink: 0;
 }
 
 .search-bar {
@@ -285,28 +288,6 @@ display: inline-block;
 }
 
 
-/*  MOBILE */
-
-@media (max-width: 768px) {
-
-  .search-wrapper {
-    width: 150px;
-    margin-left: 8px;
-  }
-
-  .search-bar::placeholder {
-    font-size: 11px;
-  }
-
-  .search-clear {
-    right: 5px;
-    width: 22px;
-    height: 22px;
-    font-size: 11px;
-  }
-
-}
-
 /*  SEARCH RESULTS  
 
 .search-results-section {
@@ -338,12 +319,6 @@ display: inline-block;
 .navbar div {
     width: 100%;
   }
-.navbar button {
-    width: 40%;
-    padding: 8px;
-    font-size: 14px;
-    padding-left: 50px;
-  }
 
 @media (max-width: 768px){
   .root{
@@ -362,13 +337,17 @@ display: inline-block;
     margin-right: 8px;
     flex-shrink: 0;
   }
-  .navbar button{
-    
-    padding:6px 10px;
-    font-size:14px;
+  
+  .navbar button {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 15px;
     white-space: nowrap;
   
-  }
+}
 
 }
 
@@ -1709,7 +1688,6 @@ display:flex;
   z-index: 0;
 }
     
-
 .top10-poster {
   position: relative;
   z-index: 1;
@@ -1726,4 +1704,95 @@ display:flex;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/*  WATCHLIST   */
+
+  .modal-trailer-btn {
+  display: block;
+  margin: 20px auto 0;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 22px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.modal-trailer-btn:hover {
+  opacity: 0.85;
+}
+
+.modal-secondary-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.modal-secondary-actions button {
+  border: none;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  background: #222;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.modal-secondary-actions button:hover {
+  background: #333;
+}
+
+/*
+.modal-like-btn.liked {
+  background: #e50914 !important;
+}
+*/
+
+.modal-watchlist-btn.saved {
+  color: #4ade80;
+}
+
+/* WATCHLIST BUTTON NAV */
+
+.watchlist-nav {
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 12px;
+  transition: 0.2s ease;
+  white-space: nowrap;
+}
+
+.watchlist-nav:hover {
+  color: #e50914;
+}
+
+
+/* NAVBAR BUTTONS */
+
+.navbar > button,
+.navbar > div > button,
+.watchlist-nav {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.navbar > button {
+  margin-left: 12px !important;
+}
+
+.navbar > div > button {
+  margin-left: 12px !important;
+}
+
+.watchlist-nav {
+  margin-left: 12px;
 }

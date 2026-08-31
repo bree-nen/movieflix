@@ -69,6 +69,7 @@ const getGenreNames = (movie, limit = 2) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null);
+  
 {/*
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false); 
@@ -115,6 +116,15 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
   const [trendingTV, setTrendingTV] = useState([]);
 
   const [top10Type, setTop10Type] = useState("movies");
+
+
+  const [likedMovies, setLikedMovies] = useState(() => {
+    return JSON.parse(localStorage.getItem("movieflixLikedMovies")) || [];
+      });
+
+  const [watchlist, setWatchlist] = useState(() => {
+     return JSON.parse(localStorage.getItem("movieflixWatchlist")) || [];
+        });
 
   const [topRated, setTopRated] = useState([]);
   const [trendingPeriod, setTrendingPeriod] = useState("day");
@@ -371,6 +381,40 @@ const searchTMDB = async (query) => {
 };
 
 */}
+
+const toggleLike = (movie) => {
+  setLikedMovies((prev) => {
+    const exists = prev.some((item) => item.id === movie.id);
+
+    const updated = exists
+      ? prev.filter((item) => item.id !== movie.id)
+      : [...prev, movie];
+
+    localStorage.setItem(
+      "movieflixLikedMovies",
+      JSON.stringify(updated)
+    );
+
+    return updated;
+  });
+};
+
+const toggleWatchlist = (movie) => {
+  setWatchlist((prev) => {
+    const exists = prev.some((item) => item.id === movie.id);
+
+    const updated = exists
+      ? prev.filter((item) => item.id !== movie.id)
+      : [...prev, movie];
+
+    localStorage.setItem(
+      "movieflixWatchlist",
+      JSON.stringify(updated)
+    );
+
+    return updated;
+  });
+};
 
   // FETCH MOVIE DATA
   useEffect(() => {
@@ -641,7 +685,11 @@ if (mode === "tv") {
     return () => current && observer.unobserve(current);
   }, [loaderRef.current, mode, page, tvPage]);
 
-  // CARD
+  
+
+      // CARD
+
+
   const MovieCard = ({ movie, isTV }) => (
     <div className="movie-card">
       <img
@@ -655,6 +703,7 @@ if (mode === "tv") {
       />
 
       {/* ⭐ ADDED: YEAR + GENRE */}
+
       <div style={{ padding: "6px 8px", fontSize: "11px", opacity: 0.8 }}>
         {movie.release_date || movie.first_air_date
           ? new Date(movie.release_date || movie.first_air_date).getFullYear()
@@ -682,6 +731,99 @@ if (mode === "tv") {
       </div>
     </div>
   );
+
+  
+
+  
+{/* 
+
+    // CARD
+
+const MovieCard = ({ movie, isTV }) => (
+  <div className="movie-card">
+
+    <img
+      src={
+        movie.poster_path
+          ? `${IMAGE_BASE_URL}${movie.poster_path}`
+          : "https://via.placeholder.com/300x450"
+      }
+      alt={movie.title || movie.name}
+      onClick={() => openMovie(movie)}
+    />
+
+    {/* ⭐ YEAR + GENRE 
+
+    <div style={{ padding: "6px 8px", fontSize: "11px", opacity: 0.8 }}>
+      {movie.release_date || movie.first_air_date
+        ? new Date(
+            movie.release_date || movie.first_air_date
+          ).getFullYear()
+        : "—"}{" "}
+      •{" "}
+      {movie.genre_ids?.length
+        ? movie.genre_ids
+            .map((id) => GENRES[id])
+            .filter(Boolean)
+            .slice(0, 1)
+            .join(", ")
+        : "Genre"}
+    </div>
+
+    {/* ❤️ LIKE + 📋 WATCHLIST 
+
+    <div className="movie-actions">
+
+      <button
+        className={`like-btn ${
+          likedMovies.some((item) => item.id === movie.id)
+            ? "liked"
+            : ""
+        }`}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleLike(movie);
+        }}
+      >
+        {likedMovies.some((item) => item.id === movie.id)
+          ? "❤️ Liked"
+          : "♡ Like"}
+      </button>
+
+      <button
+        className={`watchlist-btn ${
+          watchlist.some((item) => item.id === movie.id)
+            ? "saved"
+            : ""
+        }`}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleWatchlist(movie);
+        }}
+      >
+        {watchlist.some((item) => item.id === movie.id)
+          ? "✓ Saved"
+          : "+ List"}
+      </button>
+
+    </div>
+
+    <div className="movie-overlay">
+      <button
+        className="trailer-btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          openTrailer(movie);
+        }}
+      >
+        ▶ Trailer
+      </button>
+    </div>
+
+  </div>
+);
+
+ */}
 
   const MovieRow = ({ title, movies }) => (
     <section className="movie-row">
@@ -783,39 +925,57 @@ const selectedMovieGenreName =
         >
           MOVIEFLIX
         </h1>
+         
+
+        
 
         <button
           onClick={() => setMode("tv")}
           style={{
-            marginLeft: "20px",
-            background: mode === "tv" ? "#e50914" : "transparent",
-            color: "white",
-            border: "1px solid #e50914",
+            marginLeft: "12px",
+            
+            background: "transparent",
+            color: mode === "tv" ? "#e50914" : "white",
+
+            border: "none",
             padding: "6px 6px",
-            borderRadius: "20px",
+            borderRadius: "0",
             cursor: "pointer",
-            width: "min(90vw, 500px)" 
+            
           }}
+      
+
         >
           TV Shows
         </button>
 
+        
+
+   
 
         {/*TV SHOWS GENRE BUTTON*/}
 
-        {mode === "tv" && (
-  <div style={{ position: "relative" }}>
+
+  {mode === "tv" && (  
+   <div
+    style={{
+      position: "relative",
+      width: "fit-content",
+      flexShrink: 0,
+     }}
+   >
+
     <button
       onClick={() => setShowGenres(!showGenres)}
       style={{
-        marginLeft: "10px",
+        marginLeft: "5px",
         background: "transparent",
         color: "white",
-        border: "1px solid #e50914",
+        border: "none",
         padding: "6px 6px",
-        borderRadius: "20px",
+        borderRadius: "0",
         cursor: "pointer",
-        minWidth: "80px ",
+        
       }}
       class="desktop-only"
     >
@@ -836,10 +996,10 @@ const selectedMovieGenreName =
       background: "rgba(0, 0, 0, 0.75)",
       backdropFilter: "blur(12px)",
       WebkitBackdropFilter: "blur(12px)",
-
+      
       border: "1px solid rgba(229, 9, 20, 0.4)",
       borderRadius: "12px",
-
+     
       boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
       
       zIndex: 9999,
@@ -889,13 +1049,17 @@ const selectedMovieGenreName =
           onClick={() => setMode("movies")}
           style={{
             marginLeft: "0",
-            background: mode === "movies" ? "#e50914" : "transparent",
-            color: "white",
-            border: "1px solid #e50914",
+            
+            background: "transparent",
+            color: mode === "movies" ? "#e50914" : "white",
+            
             padding: "6px 6px",
-            borderRadius: "20px",
+
+            border:"none",
+            borderRadius: "0",
+
             cursor: "pointer",
-            width: "min(90vw, 500px)",
+            
           }}
         >
           Movies
@@ -903,18 +1067,29 @@ const selectedMovieGenreName =
 
 
 {mode === "movies" && (
-  <div style={{ position: "relative" }}>
+
+  <div
+  style={{
+    position: "relative",
+    width: "fit-content",
+    flexShrink: 0,
+  }}
+  >
+
     <button
       onClick={() => setShowMovieGenres(!showMovieGenres)}
       style={{
-        marginLeft: "10px",
+        marginLeft: "5px",
         background: "transparent",
         color: "white",
-        border: "1px solid #e50914",
+        
         padding: "6px 6px",
-        borderRadius: "20px",
+        
+        border:"none", 
+        borderRadius: "0",
+
         cursor: "pointer",
-        minWidth: "80px",
+        
       }}
       class="desktop-only"
     >
@@ -937,9 +1112,10 @@ const selectedMovieGenreName =
           background: "rgba(0, 0, 0, 0.75)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-
-          border: "1px solid rgba(229,9,20,0.4)",
+          
+          border: "1px solid rgba(229, 9, 20, 0.4)",
           borderRadius: "12px",
+          
 
           boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
           zIndex: 9999,
@@ -997,21 +1173,28 @@ const selectedMovieGenreName =
   </div>
 )}
 
+
+{/* WATCHLIST */}
+
+<span
+  className="watchlist-nav desktop-only"
+  onClick={() => {
+    const watchlistSection = document.getElementById("watchlist-section");
+
+    if (watchlistSection) {
+      watchlistSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }}
+>
+  Watchlist
+</span>
+
+
 {/*     SEARCH BAR     */}
 
-{/*
- <input
-  className="search-bar"
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  placeholder="Search..."
-/>
-
-<div style={{ display: "flex", alignItems: "center", gap: "10px"}}>
-
-  </div>
-
-  */}
 
   <div className="search-wrapper">
 
@@ -1035,6 +1218,7 @@ const selectedMovieGenreName =
   )}
 
 </div>
+
 
 </nav> 
 
@@ -1591,7 +1775,59 @@ const selectedMovieGenreName =
 
          </section>     
 
-        
+        {/* 📋 MY WATCHLIST */}
+
+     {watchlist.length > 0 && (
+    <section id="watchlist-section">
+
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        marginBottom: "10px",
+      }}
+    >
+
+      <h2
+        style={{
+          margin: 0,
+          color: "red",
+          marginTop: "25px",
+          paddingLeft: "100px",
+        }}
+      >
+        My Watchlist
+      </h2>
+
+    </div>
+
+    <br />
+
+    <p
+
+  style={{
+    opacity: 0.7,
+    fontSize: "17px",
+    marginTop: "-8px",
+    marginLeft: "50px",
+    paddingLeft: "50px",
+    textAlign: "left",
+    alignSelf: "flex-start",
+    width: "100%",
+  }}
+ >
+  Movies you've saved to watch later.
+  </p>
+
+    <MovieRow
+      title=""
+      movies={watchlist}
+    />
+
+  </section>
+)}
+
 
           <section className="movie-row">
 
@@ -1714,7 +1950,7 @@ const selectedMovieGenreName =
           </p>
 
 
-          {/* 🎥 WATCH TRAILER */}
+          {/* 🎥 WATCH TRAILER 
 
             <button
               className="modal-trailer-btn"
@@ -1722,6 +1958,51 @@ const selectedMovieGenreName =
               >
               ▶ Watch Trailer
             </button>
+
+           */}
+
+
+           
+           {/* 🎥 WATCH TRAILER */}
+
+<button
+  className="modal-trailer-btn"
+  onClick={() => openTrailer(selectedMovie)}
+>
+  ▶ Watch Trailer
+</button>
+
+{/* ❤️ LIKE + 📋 WATCHLIST */}
+
+<div className="modal-secondary-actions">
+
+  <button
+    className={`modal-like-btn ${
+      likedMovies.some((item) => item.id === selectedMovie.id)
+        ? "liked"
+        : ""
+    }`}
+    onClick={() => toggleLike(selectedMovie)}
+  >
+    {likedMovies.some((item) => item.id === selectedMovie.id)
+      ? "❤️ Liked"
+      : "♡ Like"}
+  </button>
+
+  <button
+    className={`modal-watchlist-btn ${
+      watchlist.some((item) => item.id === selectedMovie.id)
+        ? "saved"
+        : ""
+    }`}
+    onClick={() => toggleWatchlist(selectedMovie)}
+  >
+    {watchlist.some((item) => item.id === selectedMovie.id)
+      ? "✓ Saved"
+      : "+ Watchlist"}
+    </button>
+
+  </div>
 
         </div>
 
