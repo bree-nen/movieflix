@@ -111,6 +111,11 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
 
 
   const [trending, setTrending] = useState([]);
+  
+  const [trendingTV, setTrendingTV] = useState([]);
+
+  const [top10Type, setTop10Type] = useState("movies");
+
   const [topRated, setTopRated] = useState([]);
   const [trendingPeriod, setTrendingPeriod] = useState("day");
 
@@ -373,6 +378,10 @@ const searchTMDB = async (query) => {
     fetch(TRENDING_URL)
        .then((res) => res.json())
        .then((data) => setTrending(data.results || []));
+
+    fetch("https://api.themoviedb.org/3/trending/tv/day?api_key=5397bbf0a2433675faec26633a785796")
+      .then((res) => res.json())
+      .then((data) => setTrendingTV(data.results || []));
 
     fetch(TOP_RATED_URL)
       .then((res) => res.json())
@@ -1403,7 +1412,7 @@ const selectedMovieGenreName =
 <br/>
 
   <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingRight:"80px" }}>
-  Movies and shows trending globally right now.
+  Movies trending globally right now.
   Updated daily and weekly based on what people are watching.
   </p>
 
@@ -1413,9 +1422,76 @@ const selectedMovieGenreName =
 
  {/*<AdBanner /> */} 
 
+
+</section>
+
+
+{/* TOP 10 TRENDING */}
+
+
+<section className="top10-section">
+
+  <div className="top10-header">
+    <h2>Top 10 Trending</h2>
+  </div>
+
+  <p className="top10-description">
+    The most popular movies and TV shows trending right now.
+  </p>
+
+  <div className="top10-tabs">
+
+    <button
+      className={top10Type === "movies" ? "active" : ""}
+      onClick={() => setTop10Type("movies")}
+    >
+      Movies
+    </button>
+
+    <button
+      className={top10Type === "tv" ? "active" : ""}
+      onClick={() => setTop10Type("tv")}
+    >
+      TV Shows
+    </button>
+
+  </div>
+
+  <div className="top10-row">
+
+    {(top10Type === "movies" ? trending : trendingTV)
+      .slice(0, 10)
+      .map((movie, index) => (
+
+        <div className="top10-card" key={movie.id}>
+
+          <span className="top10-number">
+            {index + 1}
+          </span>
+
+          <div
+            className="top10-poster"
+            onClick={() => openMovie(movie)}
+          >
+
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title || movie.name}
+            />
+
+          </div>
+
+        </div>
+
+      ))}
+
+  </div>
+
 </section>
 
   
+
+
 <section>
   <div
     style={{
