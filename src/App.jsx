@@ -73,6 +73,9 @@ const getGenreNames = (movie, limit = 2) => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [cast, setCast] = useState([]);
 
+  const [selectedActor, setSelectedActor] = useState(null);
+  const [actorMovies, setActorMovies] = useState([]);
+
   const [reviews, setReviews] = useState([]);
   const [expandedReview, setExpandedReview] = useState(null);
 
@@ -170,6 +173,38 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
 
   } catch (err) {
     console.error(err);
+  }
+};
+
+const openActor = async (actor) => {
+  try {
+    setSelectedActor(actor);
+
+    const detailsRes = await fetch(
+      `https://api.themoviedb.org/3/person/${actor.id}?api_key=5397bbf0a2433675faec26633a785796`
+    );
+
+    const detailsData = await detailsRes.json();
+
+    setSelectedActor(detailsData);
+
+    const creditsRes = await fetch(
+      `https://api.themoviedb.org/3/person/${actor.id}/combined_credits?api_key=5397bbf0a2433675faec26633a785796`
+    );
+
+    const creditsData = await creditsRes.json();
+
+    const movies = (creditsData.cast || [])
+      .filter((item) => item.poster_path)
+      .sort(
+        (a, b) =>
+          new Date(b.release_date || b.first_air_date || 0) -
+          new Date(a.release_date || a.first_air_date || 0)
+      );
+
+    setActorMovies(movies);
+  } catch (err) {
+    console.error("Error loading actor:", err);
   }
 };
 
@@ -1289,7 +1324,6 @@ const selectedMovieGenreName =
       ) : (
 
 
-        
 
         <section className="movie-row">
 
@@ -1330,9 +1364,6 @@ const selectedMovieGenreName =
 
       <div ref={loaderRef} style={{ height: "60px" }} />
 
-
-
-      
 
 
  {/* MODAL */}
@@ -1406,6 +1437,7 @@ const selectedMovieGenreName =
             <div
               key={actor.id}
               className="cast-card"
+              onClick={() => openActor(actor)}
             >
 
               <img
@@ -1614,6 +1646,123 @@ const selectedMovieGenreName =
       <button
         className="btn close"
         onClick={closeModal}
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+)}
+
+{/* 👤 ACTOR MODAL */}
+
+{selectedActor && (
+  <div
+    className="actor-modal-overlay"
+    onClick={() => setSelectedActor(null)}
+  >
+
+    <div
+      className="actor-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+
+      {/* ACTOR HEADER */}
+
+      <div className="actor-header">
+
+        <img
+          src={
+            selectedActor.profile_path
+              ? `https://image.tmdb.org/t/p/w500${selectedActor.profile_path}`
+              : "https://via.placeholder.com/300x450?text=No+Image"
+          }
+          alt={selectedActor.name}
+        />
+
+        <div className="actor-info">
+
+          <h2>{selectedActor.name}</h2>
+
+          <p>
+            🎭 {selectedActor.known_for_department || "Acting"}
+          </p>
+
+          {selectedActor.birthday && (
+            <p>
+              🎂 {selectedActor.birthday}
+            </p>
+          )}
+
+          {selectedActor.place_of_birth && (
+            <p>
+              📍 {selectedActor.place_of_birth}
+            </p>
+          )}
+
+        </div>
+
+      </div>
+
+
+      {/* BIOGRAPHY */}
+
+      {selectedActor.biography && (
+        <div className="actor-biography">
+
+          <h3>Biography</h3>
+
+          <p>
+            {selectedActor.biography}
+          </p>
+
+        </div>
+      )}
+
+
+      {/* 🎬 FILMOGRAPHY */}
+
+      <div className="actor-filmography">
+
+        <h3>Known For</h3>
+
+        <div className="actor-movies">
+
+          {actorMovies.slice(0, 12).map((item) => (
+
+            <div
+              className="actor-movie-card"
+              key={`${item.id}-${item.media_type}`}
+              onClick={() => {
+                setSelectedActor(null);
+                openMovie(item);
+              }}
+            >
+
+              <img
+                src={`https://image.tmdb.org/t/p/w300${item.poster_path}`}
+                alt={item.title || item.name}
+              />
+
+              <p>
+                {item.title || item.name}
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </div>
+
+
+      {/* CLOSE ACTOR */}
+
+      <button
+        className="actor-close"
+        onClick={() => setSelectedActor(null)}
       >
         Close
       </button>

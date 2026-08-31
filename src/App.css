@@ -645,6 +645,7 @@ display:flex;
 .cast-card {
   min-width: 100px;
   text-align: center;
+  cursor: pointer;
 }
 
 .cast-card img {
@@ -1193,7 +1194,6 @@ display:flex;
   text-decoration: underline;
 }
 
-
 /* NO REVIEWS */
 
 .no-reviews {
@@ -1213,7 +1213,6 @@ display:flex;
   font-size: 13px;
 }
 
-
 /* MOBILE */
 
 @media (max-width: 600px) {
@@ -1232,6 +1231,191 @@ display:flex;
 
   .review-content {
     font-size: 12px;
+  }
+
+}
+
+/* =========================
+   ACTOR MODAL
+========================= */
+
+.actor-modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.92);
+
+  overflow-y: auto;
+
+  z-index: 10000;
+
+  padding: 30px 20px;
+
+  box-sizing: border-box;
+}
+
+
+.actor-modal {
+  width: 100%;
+  max-width: 1000px;
+
+  margin: auto;
+
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 40px;
+
+  box-sizing: border-box;
+
+  color: #111;
+}
+
+
+/* ACTOR HEADER */
+
+.actor-header {
+  display: flex;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+}
+
+
+.actor-header img {
+  width: 180px;
+  height: 270px;
+
+  object-fit: cover;
+
+  border-radius: 14px;
+}
+
+
+.actor-info {
+  padding-top: 10px;
+}
+
+
+.actor-info h2 {
+  font-size: 32px;
+
+  margin: 0 0 15px;
+}
+
+
+.actor-info p {
+  color: #555;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+/* BIOGRAPHY */
+
+.actor-biography {
+  margin-bottom: 30px;
+}
+
+.actor-biography h3,
+.actor-filmography h3 {
+  font-size: 21px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.actor-biography p {
+  color: #444;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* FILMOGRAPHY */
+
+.actor-movies {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+}
+
+.actor-movie-card {
+  min-width: 130px;
+  width: 130px;
+  cursor: pointer;
+}
+
+.actor-movie-card img {
+  width: 130px;
+  height: 195px;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.actor-movie-card:hover img {
+  transform: scale(1.04);
+}
+
+.actor-movie-card p {
+  font-size: 12px;
+  color: #111;
+  margin-top: 7px;
+  line-height: 1.3;
+}
+
+/* CLOSE */
+
+.actor-close {
+  width: 100%;
+  margin-top: 30px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+}
+
+.actor-close:hover {
+  background: darkviolet;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .actor-modal-overlay {
+    padding: 0;
+  }
+
+  .actor-modal {
+    min-height: 100vh;
+
+    border-radius: 0;
+
+    padding: 20px;
+  }
+
+  .actor-header {
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+  }
+
+  .actor-header img {
+    width: 160px;
+    height: 240px;
+  }
+
+  .actor-info h2 {
+    font-size: 26px;
   }
 
 }
