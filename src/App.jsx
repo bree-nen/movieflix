@@ -1233,7 +1233,7 @@ const selectedMovieGenreName =
 
 {/*     SEARCH BAR     */}
 
-
+  {mode === "movies" && (
   <div className="search-wrapper">
 
   <span className="search-icon">🔎</span>
@@ -1257,6 +1257,7 @@ const selectedMovieGenreName =
 
 </div>
 
+  )}
 
 </nav> 
 
