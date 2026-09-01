@@ -1214,6 +1214,8 @@ const selectedMovieGenreName =
 
 {/* WATCHLIST */}
 
+
+{mode === "movies" && (
 <span
   className="watchlist-nav desktop-only"
   onClick={() => {
@@ -1230,6 +1232,7 @@ const selectedMovieGenreName =
   Watchlist
 </span>
 
+)}
 
 {/*     SEARCH BAR     */}
 
