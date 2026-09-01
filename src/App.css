@@ -6,6 +6,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 body {
   background: #0a0a0a;
@@ -111,6 +117,10 @@ body {
 /* NAV */
 
 .navbar {
+/*
+  max-width: 100%;
+  box-sizing: border-box;
+*/
   display: flex;
   flex-wrap: nowrap;
   gap: 5px;
@@ -569,62 +579,6 @@ display:flex;
 }
 
 /* MODAL */
-/* 
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  padding: 15px;
-
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-.modal-content {
-  background: #7874788f;
-  width: 70%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 12px;
-  padding: 20px;
-
-}
-
-.modal-content img {
-  width: 200px;
-  height: auto;
-  border-radius: 10px;
-  }
-
-   .modal-text h2 {
-    font-size: 26px;
-  }
-
-  .modal-text p {
-    font-size: 17px;
-    line-height: 1.4;
-  }
-
-@media (max-width: 768px) {
-
-  .modal-content {
-    width: 95%;
-    max-height: 85vh;
-    padding: 15px;
-    font-size: 14px;
-  }
-
-}
-*/
 
 /* FULL PAGE MOVIE MODAL */
 
@@ -720,7 +674,7 @@ display:flex;
 /* CAST */
 
 .cast-section {
-  margin-top: 25px;
+  margin-top: 5px;
   margin-bottom: 30px;
 }
 
@@ -1036,7 +990,6 @@ display:flex;
 
 }
 
-
 /* FEED GRID */
 .movie-feed {
   padding: 20px 50px;
@@ -1062,7 +1015,6 @@ display:flex;
 }
 
 /* TRAILER POPUP */
-
 
 .trailer-modal {
   position: fixed;
@@ -1392,33 +1344,23 @@ display:flex;
 
 }
 
-/* =========================
-   ACTOR MODAL
-========================= */
+/* ACTOR MODAL  */
 
 .actor-modal-overlay {
   position: fixed;
   inset: 0;
-
   width: 100%;
   height: 100vh;
-
   background: rgba(0, 0, 0, 0.92);
-
   overflow-y: auto;
-
   z-index: 10000;
-
   padding: 30px 20px;
-
   box-sizing: border-box;
 }
-
 
 .actor-modal {
   width: 100%;
   max-width: 1000px;
-
   margin: auto;
 
   background: white;
@@ -1437,34 +1379,25 @@ display:flex;
 
 .actor-header {
   display: flex;
-
   gap: 30px;
-
   margin-bottom: 30px;
 }
-
 
 .actor-header img {
   width: 180px;
   height: 270px;
-
   object-fit: cover;
-
   border-radius: 14px;
 }
-
 
 .actor-info {
   padding-top: 10px;
 }
 
-
 .actor-info h2 {
   font-size: 32px;
-
   margin: 0 0 15px;
 }
-
 
 .actor-info p {
   color: #555;
@@ -1552,17 +1485,13 @@ display:flex;
 
   .actor-modal {
     min-height: 100vh;
-
     border-radius: 0;
-
     padding: 20px;
   }
 
   .actor-header {
     flex-direction: column;
-
     align-items: center;
-
     text-align: center;
   }
 
@@ -1577,9 +1506,7 @@ display:flex;
 
 }
 
-/* =========================
-   TOP 10 TRENDING
-========================= */
+/*  TOP 10 TRENDING   */
 
 .top10-section {
   margin-top: 35px;
@@ -1587,25 +1514,6 @@ display:flex;
   overflow: hidden;
 }
 
-/*
-.top10-header {
-  padding-left: 100px;
-}
-
-.top10-header h2 {
-  margin: 0;
-  color: red;
-  font-size: 28px;
-  margin-top: 25px;
-}
-
-.top10-description {
-  opacity: 0.7;
-  font-size: 17px;
-  margin: 8px 0 15px 100px;
-  margin-left: 50px;
-}
-*/
 
 .top10-header {
   width: 100%;
@@ -1677,14 +1585,11 @@ display:flex;
   position: absolute;
   left: -5px;
   bottom: -15px;
-
   font-size: 150px;
   font-weight: 900;
   line-height: 1;
-
   color: #111;
   -webkit-text-stroke: 3px white;
-
   z-index: 0;
 }
     
@@ -1795,4 +1700,535 @@ display:flex;
 
 .watchlist-nav {
   margin-left: 12px;
+}
+
+/* =========================================
+   TV SHOWS PAGE
+   ========================================= */
+
+.tv-hero {
+  min-height: 620px;
+}
+
+.tv-hero-label {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #e50914;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.tv-hero .hero-content {
+  max-width: 650px;
+}
+
+.tv-hero .hero-content h1 {
+  font-size: 58px;
+  margin-bottom: 15px;
+}
+
+.hero-meta {
+  font-size: 16px;
+  margin-bottom: 18px;
+  opacity: 0.9;
+}
+
+.tv-section {
+  margin-top: 45px;
+}
+
+.tv-section-header {
+  padding-left: 70px;
+  margin-bottom: 5px;
+}
+
+.tv-section-header h2 {
+  color: white;
+  font-size: 32px;
+  margin: 5px 0 8px;
+}
+
+.tv-section-header p {
+  color: rgba(255,255,255,0.65);
+  font-size: 16px;
+}
+
+.section-kicker {
+  display: block;
+  color: #e50914;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+}
+
+
+/* TV RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .tv-hero {
+    min-height: 500px;
+  }
+
+  .tv-hero .hero-content h1 {
+    font-size: 38px;
+  }
+
+  .tv-section-header {
+    padding-left: 25px;
+  }
+
+  .tv-section-header h2 {
+    font-size: 25px;
+  }
+
+}
+
+/* =========================================
+   TV HERO SLIDER
+   ========================================= */
+
+.tv-hero {
+  position: relative;
+  min-height: 620px;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.8s ease;
+}
+
+.tv-hero .hero-content {
+  max-width: 650px;
+}
+
+.tv-hero-label {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #e50914;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.tv-hero .hero-content h1 {
+  font-size: 58px;
+  margin-bottom: 15px;
+}
+
+.tv-hero .hero-meta {
+  font-size: 16px;
+  margin-bottom: 18px;
+  opacity: 0.9;
+}
+
+/* HERO INDICATORS */
+
+.tv-hero-indicators {
+  position: absolute;
+  bottom: 30px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 5;
+}
+
+.tv-hero-dot {
+  width: 22px;
+  height: 4px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tv-hero-dot:hover {
+  background: white;
+}
+
+.tv-hero-dot.active {
+  width: 42px;
+  background: #e50914;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .tv-hero {
+    min-height: 500px;
+    background-position: center;
+  }
+
+  .tv-hero .hero-content h1 {
+    font-size: 38px;
+  }
+
+  .tv-hero-indicators {
+    bottom: 20px;
+    right: 25px;
+  }
+
+}
+
+/* =========================================
+   TV HERO BUTTONS
+   ========================================= */
+
+.tv-hero .hero-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.tv-hero .hero-details-btn,
+.tv-hero .hero-trailer-btn {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* MORE INFO */
+
+.tv-hero .hero-details-btn {
+  background: white;
+  color: #111;
+}
+
+.tv-hero .hero-details-btn:hover {
+  background: #dcdcdc;
+  transform: translateY(-2px);
+}
+
+/* TRAILER */
+
+.tv-hero .hero-trailer-btn {
+  background: #e50914;
+  color: white;
+}
+
+.tv-hero .hero-trailer-btn:hover {
+  background: #b20710;
+  transform: translateY(-2px);
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .tv-hero .hero-buttons {
+    gap: 8px;
+  }
+
+  .tv-hero .hero-details-btn,
+  .tv-hero .hero-trailer-btn {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+}
+
+.tv-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.tv-modal-meta span {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+/* 📺 TV SEASONS 
+
+.tv-seasons-section {
+  margin-top: 35px;
+  padding: 0 5px;
+}
+
+.tv-seasons-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.tv-seasons-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: white;
+}
+
+.tv-seasons-header span {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.tv-seasons-container {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scrollbar-width: thin;
+}
+
+.tv-season-card {
+  flex: 0 0 150px;
+  background: #151515;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+
+.tv-season-card:hover {
+  transform: translateY(-5px);
+}
+
+.tv-season-card img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+}
+
+.tv-season-info {
+  padding: 10px;
+  text-align: left;
+}
+
+.tv-season-info h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: white;
+}
+
+.tv-season-info p {
+  margin: 3px 0;
+  font-size: 12px;
+  color: #aaa;
+}
+
+@media (max-width: 600px) {
+  .tv-seasons-section {
+    margin-top: 25px;
+  }
+
+  .tv-season-card {
+    flex: 0 0 125px;
+  }
+
+  .tv-season-card img {
+    height: 175px;
+  }
+
+  .tv-seasons-header h3 {
+    font-size: 19px;
+  }
+}
+  */
+
+/* 📺 TV SEASONS */
+
+.tv-seasons-section {
+  margin-top: 20px;
+  padding: 0 5px;
+}
+
+.tv-seasons-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.tv-seasons-header h3 {
+  margin: 0px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.tv-seasons-header span {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.tv-seasons-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+}
+
+.tv-season-card {
+  flex: 0 0 150px;
+  background: #151515;
+  border-radius: 7px;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+  cursor: pointer;
+}
+
+.tv-season-card:hover {
+  transform: translateY(-5px);
+}
+
+.tv-season-card img {
+  width: 100%;
+  height: 155px;
+  object-fit: cover;
+  display: block;
+}
+
+.tv-season-info {
+  padding: 7px;
+  text-align: left;
+}
+
+.tv-season-info h4 {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: #e50914;
+  line-height: 1.3;
+}
+
+.tv-season-info p {
+  margin: 2px 0;
+  font-size: 10px;
+  color: #aaa;
+}
+
+
+/* 📱 MOBILE */
+
+@media (max-width: 600px) {
+  .tv-seasons-section {
+    margin-top: 18px;
+  }
+
+  .tv-seasons-header {
+    margin-bottom: 12px;
+  }
+
+  .tv-seasons-header h3 {
+    font-size: 18px;
+  }
+
+  .tv-seasons-header span {
+    font-size: 11px;
+  }
+
+  .tv-seasons-container {
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  .tv-season-card {
+    flex: 0 0 95px;
+    border-radius: 6px;
+  }
+
+  .tv-season-card img {
+    height: 135px;
+  }
+
+  .tv-season-info {
+    padding: 6px;
+  }
+
+  .tv-season-info h4 {
+    font-size: 11px;
+  }
+
+  .tv-season-info p {
+    font-size: 9px;
+  }
+}
+/* TV EPISODES */
+
+.tv-episodes-section {
+  margin-top: 25px;
+  padding: 0 5px;
+  color: #fff;
+}
+
+.tv-episodes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.tv-episodes-header h3 {
+  margin: 0 0 5px;
+  color: #fff;
+  font-size: 20px;
+}
+
+.tv-episodes-header span {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.tv-episodes-close {
+  background: #e50914;
+  color: #fff;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tv-episode-card {
+  display: flex;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tv-episode-card img {
+  width: 180px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.tv-episode-info {
+  color: #fff;
+}
+
+.tv-episode-info h4 {
+  margin: 0 0 8px;
+  color: #e50914;
+  font-size: 15px;
+}
+
+.tv-episode-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+
+.tv-episode-meta span {
+  color: #aaa;
+  font-size: 11px;
+}
+
+.tv-episode-info p {
+  margin: 0;
+  color: #ccc;
+  font-size: 12px;
+  line-height: 1.5;
 }

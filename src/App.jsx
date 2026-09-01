@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useEffect, useState, useRef } from "react";
 import {
+  API_KEY,
   TRENDING_URL,
   TOP_RATED_URL,
   ACTION_URL,
@@ -76,6 +77,7 @@ const getGenreNames = (movie, limit = 2) => {
   */}
 
   const [movieDetails, setMovieDetails] = useState(null);
+  const [selectedSeason, setSelectedSeason] = useState(null);
   const [cast, setCast] = useState([]);
 
   const [selectedActor, setSelectedActor] = useState(null);
@@ -109,6 +111,11 @@ const [genreTV, setGenreTV] = useState([]);
 const [genreTVPage, setGenreTVPage] = useState(1);
 const [hasMoreGenreTV, setHasMoreGenreTV] = useState(true);
 const [tvGenreLoading, setTvGenreLoading] = useState(false);
+
+const [tvDrama, setTvDrama] = useState([]);
+const [tvComedy, setTvComedy] = useState([]);
+const [tvSciFi, setTvSciFi] = useState([]);
+const [tvCrime, setTvCrime] = useState([]);
 
 
   const [trending, setTrending] = useState([]);
@@ -145,6 +152,7 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
   const [hasMoreTV, setHasMoreTV] = useState(true);
 
   const [heroIndex, setHeroIndex] = useState(0);
+  const [tvHeroIndex, setTvHeroIndex] = useState(0);
 
   const [isFading, setIsFading] = useState(false);
 
@@ -197,6 +205,24 @@ const [tvGenreLoading, setTvGenreLoading] = useState(false);
   }
 };
 
+const openSeason = async (season) => {
+  try {
+    const tvId = selectedMovie?.id;
+
+    if (!tvId) return;
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3/tv/${tvId}/season/${season.season_number}?api_key=${API_KEY}&language=en-US`
+    );
+
+    const data = await res.json();
+
+    setSelectedSeason(data);
+  } catch (err) {
+    console.error("Error loading season:", err);
+  }
+};
+
 const openActor = async (actor) => {
   try {
     setSelectedActor(actor);
@@ -238,7 +264,7 @@ const openTrailer = async (movie) => {
     const type = movie.first_air_date ? "tv" : "movie";
 
     const res = await fetch(
-      `https://api.themoviedb.org/3/${type}/${movie.id}/videos?api_key=5397bbf0a2433675faec26633a785796&language=en-US`
+      `https://api.themoviedb.org/3/${type}/${movie.id}/videos?api_key=${API_KEY}&language=en-US`
     );
 
     const data = await res.json();
@@ -343,45 +369,6 @@ const searchTMDB = async (query) => {
 
 
 
-
-{/*
-const searchTMDB = async (query) => {
-  const trimmedQuery = query.trim();
-
-  if (!trimmedQuery) {
-    setSearchResults([]);
-    setIsSearching(false);
-    return;
-  }
-
-  setIsSearching(true);
-
-  try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/search/multi?api_key=5397bbf0a2433675faec26633a785796&query=${encodeURIComponent(trimmedQuery)}&include_adult=false&language=en-US&page=1`
-    );
-
-    const data = await res.json();
-
-    const results = (data.results || []).filter(
-      (item) =>
-        item.media_type === "movie" ||
-        item.media_type === "tv"
-    );
-
-    setSearchResults(results);
-
-  } catch (error) {
-    console.error("Search error:", error);
-    setSearchResults([]);
-
-  } finally {
-    setIsSearching(false);
-  }
-};
-
-*/}
-
 const toggleLike = (movie) => {
   setLikedMovies((prev) => {
     const exists = prev.some((item) => item.id === movie.id);
@@ -417,6 +404,7 @@ const toggleWatchlist = (movie) => {
 };
 
   // FETCH MOVIE DATA
+
   useEffect(() => {
 
     fetch(TRENDING_URL)
@@ -426,6 +414,7 @@ const toggleWatchlist = (movie) => {
     fetch("https://api.themoviedb.org/3/trending/tv/day?api_key=5397bbf0a2433675faec26633a785796")
       .then((res) => res.json())
       .then((data) => setTrendingTV(data.results || []));
+  
 
     fetch(TOP_RATED_URL)
       .then((res) => res.json())
@@ -449,6 +438,55 @@ const toggleWatchlist = (movie) => {
       }); 
 
   }, [trendingPeriod]);
+
+
+
+ {/*  AUTOMATIC TV SHOWS ROTATION  */}
+
+ useEffect(() => {
+  if (mode !== "tv" || trendingTV.length === 0) return;
+
+  const interval = setInterval(() => {
+    setTvHeroIndex((prev) =>
+      (prev + 1) % Math.min(trendingTV.length, 5)
+    );
+  }, 7000);
+
+  return () => clearInterval(interval);
+}, [mode, trendingTV]);
+
+{/* TV GENRE CATEGORIES */}
+
+useEffect(() => {
+  if (mode !== "tv") return;
+
+  fetch(
+    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=18&sort_by=popularity.desc`
+  )
+    .then((res) => res.json())
+    .then((data) => setTvDrama(data.results || []));
+
+  fetch(
+    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=35&sort_by=popularity.desc`
+  )
+    .then((res) => res.json())
+    .then((data) => setTvComedy(data.results || []));
+
+  fetch(
+    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=10765&sort_by=popularity.desc`
+  )
+    .then((res) => res.json())
+    .then((data) => setTvSciFi(data.results || []));
+
+  fetch(
+    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=80&sort_by=popularity.desc`
+  )
+    .then((res) => res.json())
+    .then((data) => setTvCrime(data.results || []));
+}, [mode]);
+
+
+
 {/*
   useEffect(() => {
   const delaySearch = setTimeout(() => {
@@ -1414,7 +1452,8 @@ const selectedMovieGenreName =
 )}
 
 
-<div className="editor-picks">
+{mode === "movies" && (
+  <div className="editor-picks">
   <h3>Editor’s Picks</h3>
 
   <div className="editor-grid">
@@ -1446,7 +1485,7 @@ const selectedMovieGenreName =
     ))}
   </div>
 </div>
-
+)}
   
 
 {/* HERO */}
@@ -1528,12 +1567,101 @@ const selectedMovieGenreName =
 )}
 
 
+{/* TV SHOWS HERO SECTION  */}
 
-      {/* CONTENT */}
+{/* TV HERO */}
+
+{mode === "tv" && trendingTV.length > 0 && (() => {
+
+  const heroShow =
+    trendingTV[tvHeroIndex % Math.min(trendingTV.length, 5)];
+
+  return (
+    <section
+      className="hero tv-hero"
+      style={{
+        backgroundImage: heroShow?.backdrop_path
+          ? `linear-gradient(
+              rgba(0,0,0,0.3),
+              rgba(0,0,0,0.95)
+            ),
+            url(https://image.tmdb.org/t/p/original${heroShow.backdrop_path})`
+          : "none",
+      }}
+    >
+
+      <div className="hero-content">
+
+        <span className="tv-hero-label">
+          TRENDING TV SHOW
+        </span>
+
+        <h1>
+          {heroShow?.name || "Loading..."}
+        </h1>
+
+        <p className="hero-meta">
+          {heroShow?.first_air_date?.slice(0, 4) || "—"}
+          {" • "}
+          ⭐ {heroShow?.vote_average?.toFixed(1) || "N/A"}
+        </p>
+
+        <p>
+          {heroShow?.overview ||
+            "Discover one of the most popular shows trending right now."}
+        </p>
+
+        <div className="hero-buttons">
+
+          <button
+            className="hero-details-btn"
+            onClick={() => openMovie(heroShow)}
+          >
+            More Info
+          </button>
+
+          <button
+            className="hero-trailer-btn"
+            onClick={() => openTrailer(heroShow)}
+          >
+            ▶ Trailer
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* HERO INDICATORS */}
+
+      <div className="tv-hero-indicators">
+
+        {trendingTV.slice(0, 5).map((show, index) => (
+
+          <button
+            key={show.id}
+            className={
+              index === tvHeroIndex % 5
+                ? "tv-hero-dot active"
+                : "tv-hero-dot"
+            }
+            onClick={() => setTvHeroIndex(index)}
+            aria-label={`Show ${index + 1}`}
+          />
+
+        ))}
+
+      </div>
+
+    </section>
+  );
+
+})()}
 
 
+{/* CONTENT */}
 
-      {mode === "movies" ? (
+
+  {mode === "movies" ? (
         <>
 
 
@@ -1859,6 +1987,233 @@ const selectedMovieGenreName =
 
           </section>
         </>
+
+
+
+) : (
+
+  <>
+
+    {/* TRENDING TV */}
+
+    <section className="tv-section">
+
+      <div className="tv-section-header">
+
+        <div>
+          <span className="section-kicker">
+            WATCH WHAT'S HOT
+          </span>
+
+          <h2>
+            Trending TV Shows
+          </h2>
+
+          <p>
+            The shows everyone is watching right now.
+          </p>
+        </div>
+
+      </div>
+
+      <MovieRow
+        title=""
+        movies={trendingTV}
+      />
+
+    </section>
+
+
+    {/* TOP 10 TV */}
+
+    <section className="top10-section">
+
+      <div className="top10-header">
+
+        <span className="section-kicker">
+          MOST WATCHED
+        </span>
+
+        <h2>
+          Top 10 TV Shows
+        </h2>
+
+      </div>
+
+      <p className="top10-description">
+        The most popular TV shows trending right now.
+      </p>
+
+      <div className="top10-row">
+
+        {trendingTV
+          .slice(0, 10)
+          .map((show, index) => (
+
+            <div
+              className="top10-card"
+              key={show.id}
+            >
+
+              <span className="top10-number">
+                {index + 1}
+              </span>
+
+              <div
+                className="top10-poster"
+                onClick={() => openMovie(show)}
+              >
+
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+                  alt={show.name}
+                />
+
+              </div>
+
+            </div>
+
+          ))}
+
+      </div>
+
+    </section>
+
+
+    {/* TV GENRE ROWS */}
+
+<section className="tv-section">
+  <div className="tv-section-header">
+    <div>
+      <span className="section-kicker">
+        EXPLORE BY GENRE
+      </span>
+      <h2>
+        Popular TV Dramas
+      </h2>
+      <p>
+        The most popular drama series right now.
+      </p>
+    </div>
+  </div>
+
+  <MovieRow
+    title=""
+    movies={tvDrama}
+  />
+</section>
+
+<section className="tv-section">
+  <div className="tv-section-header">
+    <div>
+      <span className="section-kicker">
+        EXPLORE BY GENRE
+      </span>
+      <h2>
+        Popular TV Comedies
+      </h2>
+      <p>
+        Light-hearted shows everyone is watching.
+      </p>
+    </div>
+  </div>
+
+  <MovieRow
+    title=""
+    movies={tvComedy}
+  />
+</section>
+
+<section className="tv-section">
+  <div className="tv-section-header">
+    <div>
+      <span className="section-kicker">
+        EXPLORE BY GENRE
+      </span>
+      <h2>
+        Sci-Fi & Fantasy
+      </h2>
+      <p>
+        Epic worlds, mysteries and unforgettable stories.
+      </p>
+    </div>
+  </div>
+
+  <MovieRow
+    title=""
+    movies={tvSciFi}
+  />
+</section>
+
+<section className="tv-section">
+  <div className="tv-section-header">
+    <div>
+      <span className="section-kicker">
+        EXPLORE BY GENRE
+      </span>
+      <h2>
+        Popular Crime Shows
+      </h2>
+      <p>
+        Crime, mystery and gripping investigations.
+      </p>
+    </div>
+  </div>
+
+  <MovieRow
+    title=""
+    movies={tvCrime}
+  />
+</section>
+
+    {/* POPULAR TV */}
+
+    <section className="tv-section">
+
+      <div className="tv-section-header">
+
+        <div>
+
+          <span className="section-kicker">
+            DISCOVER MORE
+          </span>
+
+          <h2>
+            Popular TV Shows
+          </h2>
+
+          <p>
+            Binge-worthy series across every genre.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div className="movie-feed">
+
+        {(selectedGenre === "All"
+          ? feedTV
+          : genreTV
+        ).map((show) => (
+
+          <MovieCard
+            key={show.id}
+            movie={show}
+            isTV
+          />
+
+        ))}
+
+      </div>
+
+    </section>
+
+  </>
+
+)}
+
+        {/* 
       ) : (
 
 
@@ -1899,6 +2254,8 @@ const selectedMovieGenreName =
 
         </section>
       )}
+
+*/}
 
 
 
@@ -1942,6 +2299,25 @@ const selectedMovieGenreName =
             ⭐ Rating:{" "}
             {movieDetails?.vote_average?.toFixed(1) || "N/A"} / 10
           </p>
+
+          {selectedMovie.name && movieDetails && (
+  <div className="tv-modal-meta">
+    <span>
+      📅{" "}
+      {movieDetails.first_air_date
+        ? new Date(movieDetails.first_air_date).getFullYear()
+        : "N/A"}
+    </span>
+
+    <span>
+      📺 {movieDetails.number_of_seasons || 0} Seasons
+    </span>
+
+    <span>
+      🎬 {movieDetails.number_of_episodes || 0} Episodes
+    </span>
+  </div>
+)}
 
           {/* 🎬 OVERVIEW */}
 
@@ -2008,6 +2384,146 @@ const selectedMovieGenreName =
 
       </div>
 
+           
+
+      {/* 📺 TV SEASONS */}
+
+      {selectedMovie.name &&
+        movieDetails?.seasons?.length > 0 && (
+          <div className="tv-seasons-section">
+
+            <div className="tv-seasons-header">
+              <h3>📺 Seasons</h3>
+
+              <span>
+                {movieDetails.number_of_seasons} seasons
+              </span>
+            </div>
+
+            <div className="tv-seasons-container">
+
+              {movieDetails.seasons
+                .filter(
+                  (season) => season.season_number > 0
+                )
+                .map((season) => (
+
+                  <div
+                    className="tv-season-card"
+                    key={season.id}
+                    onClick={() => openSeason(season)}
+                  >
+
+                    <img
+                      src={
+                        season.poster_path
+                          ? `${IMAGE_BASE_URL}${season.poster_path}`
+                          : "https://via.placeholder.com/300x450?text=No+Image"
+                      }
+                      alt={season.name}
+                    />
+
+                    <div className="tv-season-info">
+
+                      <h4>{season.name}</h4>
+
+                      <p>
+                        {season.episode_count} episodes
+                      </p>
+
+                      {season.air_date && (
+                        <p>
+                          {new Date(
+                            season.air_date
+                          ).getFullYear()}
+                        </p>
+                      )}
+
+                    </div>
+
+                  </div>
+
+                ))}
+
+            </div>
+
+          </div>
+        )}
+
+      {/* 📺 TV EPISODES */}
+
+      {selectedSeason?.episodes?.length > 0 && (
+        <div className="tv-episodes-section">
+
+          <div className="tv-episodes-header">
+            <div>
+              <h3>{selectedSeason.name}</h3>
+              <span>
+                {selectedSeason.episodes.length} episodes
+              </span>
+            </div>
+
+            <button
+              className="tv-episodes-close"
+              onClick={() => setSelectedSeason(null)}
+            >
+              Hide Episodes
+            </button>
+          </div>
+
+          <div className="tv-episodes-container">
+
+            {selectedSeason.episodes.map((episode) => (
+              <div
+                className="tv-episode-card"
+                key={episode.id}
+              >
+
+                <img
+                  src={
+                    episode.still_path
+                      ? `${IMAGE_BASE_URL}${episode.still_path}`
+                      : "https://via.placeholder.com/500x281?text=No+Image"
+                  }
+                  alt={episode.name}
+                />
+
+                <div className="tv-episode-info">
+
+                  <h4>
+                    Episode {episode.episode_number}: {episode.name}
+                  </h4>
+
+                  <div className="tv-episode-meta">
+
+                    {episode.air_date && (
+                      <span>
+                        📅 {episode.air_date}
+                      </span>
+                    )}
+
+                    {episode.runtime && (
+                      <span>
+                        ⏱ {episode.runtime} min
+                      </span>
+                    )}
+
+                  </div>
+
+                  <p>
+                    {episode.overview ||
+                      "No episode description available."}
+                  </p>
+
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+
+        </div>
+      )}
 
       {/* 👥 CAST */}
 
@@ -2049,7 +2565,6 @@ const selectedMovieGenreName =
         </div>
 
       </div>
-
 
       {/* ⭐ REVIEWS */}
 
@@ -2144,7 +2659,7 @@ const selectedMovieGenreName =
 
         <button
           className="read-review"
-          onClick={() =>
+          onClick={() => 
             setExpandedReview(
               isExpanded ? null : review.id
             )
@@ -2197,7 +2712,12 @@ const selectedMovieGenreName =
         <div
           className="recommendation-card"
           key={recommendation.id}
-          onClick={() => openMovie(recommendation)}
+          //onClick={() => openMovie(recommendation)}
+
+          onClick={(e) => {
+  e.stopPropagation();
+  openMovie(recommendation);
+}}
         >
 
           <img
