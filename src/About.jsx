@@ -10,7 +10,7 @@ export default function About() {
         </p>
 
         <p style={styles.text}>
-          Built using React and TMDB API, this project demonstrates real-world frontend development,
+          This product uses the TMDB API but is not endorsed or certified by TMDB. This project demonstrates real-world frontend development,
           API integration, and responsive UI design.
         </p>
 

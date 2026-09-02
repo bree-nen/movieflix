@@ -113,14 +113,9 @@ body {
   min-height: 100vh;
 }
 
-
 /* NAV */
 
 .navbar {
-/*
-  max-width: 100%;
-  box-sizing: border-box;
-*/
   display: flex;
   flex-wrap: nowrap;
   gap: 5px;
@@ -223,8 +218,6 @@ display: inline-block;
 */
 
 
-
-
 @media (max-width: 768px) {
   .search-bar {
     display: none;
@@ -298,34 +291,6 @@ display: inline-block;
 }
 
 
-/*  SEARCH RESULTS  
-
-.search-results-section {
-  padding: 100px 50px 40px;
-}
-
-.search-results-section h2 {
-  color: white;
-  margin-bottom: 25px;
-}
-
-.search-message {
-  text-align: center;
-  color: white;
-  padding: 80px 20px;
-  opacity: 0.8;
-}
-
-.search-message h3 {
-  font-size: 24px;
-  margin: 15px 0 8px;
-}
-
-.search-message p {
-  margin: 6px 0;
-}
-*/
-
 .navbar div {
     width: 100%;
   }
@@ -356,7 +321,6 @@ display: inline-block;
     font-family: inherit;
     font-size: 15px;
     white-space: nowrap;
-  
 }
 
 }
@@ -477,24 +441,7 @@ display:flex;
   content: "";
   position: absolute;
   inset: 0;
-  
-  /*
-  background: linear-gradient(
-    rgba(0,0,0,0.45),
-    rgba(0,0,0,0.55)
-  ); 
-  */
 }
-
-
-/* CONTENT ABOVE BACKGROUND */
-
-/*
-.hero-content {
-  position: relative;
-  z-index: 2;
-}
-*/
 
 /* BUTTONS */
 
@@ -527,13 +474,6 @@ display:flex;
   padding: 25px 40px;
 }
 
-/*
-.movie-row h2 {
-  color: white;
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-}
-*/
 
 /*  NETFLIX GRID SYSTEM  */
 
@@ -608,7 +548,6 @@ display:flex;
   box-sizing: border-box;
   color: #111;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6);
-
 
 }
 
@@ -818,15 +757,24 @@ display:flex;
 
 .read-review {
   display: inline-block;
-  margin-top: 10px;
+  margin-top: 12px;
+  padding: 7px 12px;
+  background: transparent;
+  border: 1px solid #e50914;
+  border-radius: 5px;
   color: #e50914;
   font-size: 12px;
   font-weight: 600;
   text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .read-review:hover {
-  text-decoration: underline;
+  background: #e50914;
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-1px);
 }
 
 /* NO REVIEWS */
@@ -1192,7 +1140,6 @@ display:flex;
   opacity: 0.6;
 }
 
-
 /* REVIEW CONTAINER */
 
 .reviews-container {
@@ -1200,7 +1147,6 @@ display:flex;
   flex-direction: column;
   gap: 12px;
 }
-
 
 /* REVIEW CARD */
 
@@ -1218,7 +1164,6 @@ display:flex;
   box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
 }
 
-
 /* REVIEW TOP */
 
 .review-top {
@@ -1228,7 +1173,6 @@ display:flex;
   gap: 10px;
   margin-bottom: 12px;
 }
-
 
 /* REVIEWER */
 
@@ -1264,7 +1208,6 @@ display:flex;
   color: #888;
 }
 
-
 /* RATING */
 
 .review-rating {
@@ -1277,7 +1220,6 @@ display:flex;
   white-space: nowrap;
 }
 
-
 /* REVIEW TEXT */
 
 .review-content {
@@ -1286,7 +1228,6 @@ display:flex;
   font-size: 13px;
   line-height: 1.6;
 }
-
 
 /* READ MORE */
 
@@ -1362,18 +1303,12 @@ display:flex;
   width: 100%;
   max-width: 1000px;
   margin: auto;
-
   background: white;
-
   border-radius: 18px;
-
   padding: 40px;
-
   box-sizing: border-box;
-
   color: #111;
 }
-
 
 /* ACTOR HEADER */
 
@@ -1513,7 +1448,6 @@ display:flex;
   margin-bottom: 35px;
   overflow: hidden;
 }
-
 
 .top10-header {
   width: 100%;
@@ -1678,7 +1612,6 @@ display:flex;
 .watchlist-nav:hover {
   color: #e50914;
 }
-
 
 /* NAVBAR BUTTONS */
 
@@ -1949,94 +1882,6 @@ display:flex;
   border-radius: 5px;
   font-size: 13px;
 }
-
-/* 📺 TV SEASONS 
-
-.tv-seasons-section {
-  margin-top: 35px;
-  padding: 0 5px;
-}
-
-.tv-seasons-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.tv-seasons-header h3 {
-  margin: 0;
-  font-size: 22px;
-  color: white;
-}
-
-.tv-seasons-header span {
-  font-size: 13px;
-  color: #aaa;
-}
-
-.tv-seasons-container {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 12px;
-  scrollbar-width: thin;
-}
-
-.tv-season-card {
-  flex: 0 0 150px;
-  background: #151515;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.25s ease;
-}
-
-.tv-season-card:hover {
-  transform: translateY(-5px);
-}
-
-.tv-season-card img {
-  width: 100%;
-  height: 210px;
-  object-fit: cover;
-  display: block;
-}
-
-.tv-season-info {
-  padding: 10px;
-  text-align: left;
-}
-
-.tv-season-info h4 {
-  margin: 0 0 6px;
-  font-size: 14px;
-  color: white;
-}
-
-.tv-season-info p {
-  margin: 3px 0;
-  font-size: 12px;
-  color: #aaa;
-}
-
-@media (max-width: 600px) {
-  .tv-seasons-section {
-    margin-top: 25px;
-  }
-
-  .tv-season-card {
-    flex: 0 0 125px;
-  }
-
-  .tv-season-card img {
-    height: 175px;
-  }
-
-  .tv-seasons-header h3 {
-    font-size: 19px;
-  }
-}
-  */
 
 /* 📺 TV SEASONS */
 

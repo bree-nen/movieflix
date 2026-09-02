@@ -161,14 +161,14 @@ const [tvCrime, setTvCrime] = useState([]);
   try {
     // GET FULL DETAILS (rating + overview)
     const detailsRes = await fetch(
-      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}?api_key=5397bbf0a2433675faec26633a785796`
+      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}?api_key=${API_KEY}`
     );
     const detailsData = await detailsRes.json();
     setMovieDetails(detailsData);
 
     // GET CAST
     const creditsRes = await fetch(
-      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/credits?api_key=5397bbf0a2433675faec26633a785796`
+      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/credits?api_key=${API_KEY}`
     );
     const creditsData = await creditsRes.json();
 
@@ -176,7 +176,7 @@ const [tvCrime, setTvCrime] = useState([]);
     
     // GET REVIEWS
     const reviewsRes = await fetch(
-      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/reviews?api_key=5397bbf0a2433675faec26633a785796`
+      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/reviews?api_key=${API_KEY}`
     );
 
     const reviewsData = await reviewsRes.json();
@@ -185,7 +185,7 @@ const [tvCrime, setTvCrime] = useState([]);
 
     // GET RECOMMENDATIONS
     const recommendationsRes = await fetch(
-  `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/recommendations?api_key=5397bbf0a2433675faec26633a785796`
+  `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/recommendations?api_key=${API_KEY}`
    );
 
     const recommendationsData = await recommendationsRes.json();
@@ -815,7 +815,7 @@ const MovieCard = ({ movie, isTV }) => (
       <h2>{title}</h2>
 
       <div className="movie-container">
-        
+
         {movies?.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
@@ -1362,7 +1362,7 @@ const selectedMovieGenreName =
   <li>Explore top-rated films across all genres</li>
   <li>Watch official trailers instantly</li>
   <li>Browse TV shows and movie collections</li>
-  <li>Search any movie of your choice</li>
+  
   <li>Click movie of your choice to get movie details, ratings and the the top billed cast</li>
 
 
