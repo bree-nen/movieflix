@@ -2,11 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useEffect, useState, useRef } from "react";
 import {
-  API_KEY,
-  TRENDING_URL,
-  TOP_RATED_URL,
-  ACTION_URL,
-  COMEDY_URL,
+  tmdbFetch,
   IMAGE_BASE_URL,
 } from "./api";
 import "./App.css";
@@ -160,35 +156,30 @@ const [tvCrime, setTvCrime] = useState([]);
 
   try {
     // GET FULL DETAILS (rating + overview)
-    const detailsRes = await fetch(
-      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}?api_key=${API_KEY}`
+    const detailsData = await tmdbFetch(
+      `${movie.title ? "movie" : "tv"}/${movie.id}`
     );
-    const detailsData = await detailsRes.json();
+
     setMovieDetails(detailsData);
 
     // GET CAST
-    const creditsRes = await fetch(
-      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/credits?api_key=${API_KEY}`
+    const creditsData = await tmdbFetch(
+      `${movie.title ? "movie" : "tv"}/${movie.id}/credits`
     );
-    const creditsData = await creditsRes.json();
 
     setCast(creditsData.cast?.slice(0, 8) || []);
     
     // GET REVIEWS
-    const reviewsRes = await fetch(
-      `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/reviews?api_key=${API_KEY}`
-    );
-
-    const reviewsData = await reviewsRes.json();
+    const reviewsData = await tmdbFetch(
+  `${movie.title ? "movie" : "tv"}/${movie.id}/reviews`
+);
 
     setReviews(reviewsData.results || []);
 
     // GET RECOMMENDATIONS
-    const recommendationsRes = await fetch(
-  `https://api.themoviedb.org/3/${movie.title ? "movie" : "tv"}/${movie.id}/recommendations?api_key=${API_KEY}`
-   );
-
-    const recommendationsData = await recommendationsRes.json();
+    const recommendationsData = await tmdbFetch(
+  `${movie.title ? "movie" : "tv"}/${movie.id}/recommendations`
+);
 
   setRecommendations(
   recommendationsData.results?.slice(0, 10) || []
@@ -205,11 +196,12 @@ const openSeason = async (season) => {
 
     if (!tvId) return;
 
-    const res = await fetch(
-      `https://api.themoviedb.org/3/tv/${tvId}/season/${season.season_number}?api_key=${API_KEY}&language=en-US`
-    );
-
-    const data = await res.json();
+    const data = await tmdbFetch(
+  `tv/${tvId}/season/${season.season_number}`,
+  {
+    language: "en-US",
+  }
+);
 
     setSelectedSeason(data);
   } catch (err) {
@@ -221,19 +213,15 @@ const openActor = async (actor) => {
   try {
     setSelectedActor(actor);
 
-    const detailsRes = await fetch(
-      `https://api.themoviedb.org/3/person/${actor.id}?api_key=5397bbf0a2433675faec26633a785796`
-    );
-
-    const detailsData = await detailsRes.json();
+    const detailsData = await tmdbFetch(
+  `person/${actor.id}`
+);
 
     setSelectedActor(detailsData);
 
-    const creditsRes = await fetch(
-      `https://api.themoviedb.org/3/person/${actor.id}/combined_credits?api_key=5397bbf0a2433675faec26633a785796`
-    );
-
-    const creditsData = await creditsRes.json();
+    const creditsData = await tmdbFetch(
+  `person/${actor.id}/combined_credits`
+);
 
     const movies = (creditsData.cast || [])
       .filter((item) => item.poster_path)
@@ -257,11 +245,12 @@ const openTrailer = async (movie) => {
   try {
     const type = movie.first_air_date ? "tv" : "movie";
 
-    const res = await fetch(
-      `https://api.themoviedb.org/3/${type}/${movie.id}/videos?api_key=${API_KEY}&language=en-US`
-    );
-
-    const data = await res.json();
+    const data = await tmdbFetch(
+  `${type}/${movie.id}/videos`,
+  {
+    language: "en-US",
+  }
+);
 
     // 🎬 Get all usable YouTube videos
     const videos = (data.results || [])
@@ -364,39 +353,30 @@ const toggleWatchlist = (movie) => {
 
   // FETCH MOVIE DATA
 
-  useEffect(() => {
+useEffect(() => {
+  tmdbFetch(`trending/movie/${trendingPeriod}`)
+    .then((data) => setTrending(data.results || []));
 
-    fetch(TRENDING_URL)
-       .then((res) => res.json())
-       .then((data) => setTrending(data.results || []));
+  tmdbFetch("trending/tv/day")
+    .then((data) => setTrendingTV(data.results || []));
 
-    fetch("https://api.themoviedb.org/3/trending/tv/day?api_key=5397bbf0a2433675faec26633a785796")
-      .then((res) => res.json())
-      .then((data) => setTrendingTV(data.results || []));
-  
+  tmdbFetch("movie/top_rated")
+    .then((data) => setTopRated(data.results || []));
 
-    fetch(TOP_RATED_URL)
-      .then((res) => res.json())
-      .then((data) => setTopRated(data.results || []));
+  tmdbFetch("discover/movie", {
+    with_genres: "28",
+    sort_by: "popularity.desc",
+  })
+    .then((data) => setAction(data.results || []));
 
-    fetch(ACTION_URL)
-      .then((res) => res.json())
-      .then((data) => setAction(data.results || []));
+  tmdbFetch("discover/movie", {
+    with_genres: "35",
+    sort_by: "popularity.desc",
+  })
+    .then((data) => setComedy(data.results || []));
 
-    fetch(COMEDY_URL)
-      .then((res) => res.json())
-      .then((data) => setComedy(data.results || []));
-      
-
-      console.log("Trending period:", trendingPeriod);
-
-      fetch(`https://api.themoviedb.org/3/trending/movie/${trendingPeriod}?api_key=5397bbf0a2433675faec26633a785796`)
-          .then((res) => res.json())
-          .then((data) => {
-        
-      }); 
-
-  }, [trendingPeriod]);
+  console.log("Trending period:", trendingPeriod);
+}, [trendingPeriod]);
 
 
 
@@ -416,31 +396,32 @@ const toggleWatchlist = (movie) => {
 
 {/* TV GENRE CATEGORIES */}
 
+
 useEffect(() => {
   if (mode !== "tv") return;
 
-  fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=18&sort_by=popularity.desc`
-  )
-    .then((res) => res.json())
+  tmdbFetch("discover/tv", {
+    with_genres: "18",
+    sort_by: "popularity.desc",
+  })
     .then((data) => setTvDrama(data.results || []));
 
-  fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=35&sort_by=popularity.desc`
-  )
-    .then((res) => res.json())
+  tmdbFetch("discover/tv", {
+    with_genres: "35",
+    sort_by: "popularity.desc",
+  })
     .then((data) => setTvComedy(data.results || []));
 
-  fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=10765&sort_by=popularity.desc`
-  )
-    .then((res) => res.json())
+  tmdbFetch("discover/tv", {
+    with_genres: "10765",
+    sort_by: "popularity.desc",
+  })
     .then((data) => setTvSciFi(data.results || []));
 
-  fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=80&sort_by=popularity.desc`
-  )
-    .then((res) => res.json())
+  tmdbFetch("discover/tv", {
+    with_genres: "80",
+    sort_by: "popularity.desc",
+  })
     .then((data) => setTvCrime(data.results || []));
 }, [mode]);
 
@@ -478,10 +459,9 @@ useEffect(() => {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=5397bbf0a2433675faec26633a785796&page=${page}`
-      );
-      const data = await res.json();
+      const data = await tmdbFetch("movie/popular", {
+      page: String(page),
+        });
 
       if (!data.results?.length) {
         setHasMore(false);
@@ -512,11 +492,11 @@ useEffect(() => {
   const nextPage = genreMoviePage + 1;
 
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=5397bbf0a2433675faec26633a785796&with_genres=${selectedMovieGenre}&sort_by=popularity.desc&page=${nextPage}`
-    );
-
-    const data = await res.json();
+    const data = await tmdbFetch("discover/movie", {
+  with_genres: String(selectedMovieGenre),
+  sort_by: "popularity.desc",
+  page: String(nextPage),
+});
 
     if (!data.results?.length) {
       setHasMoreGenreMovies(false);
@@ -535,11 +515,11 @@ useEffect(() => {
 
   const fetchMoviesByGenre = async (genreId, page = 1) => {
   try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=5397bbf0a2433675faec26633a785796&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`
-    );
-
-    const data = await res.json();
+    const data = await tmdbFetch("discover/movie", {
+  with_genres: String(genreId),
+  sort_by: "popularity.desc",
+  page: String(page),
+});
 
     if (page === 1) {
       setGenreMovies(data.results || []);
@@ -568,10 +548,9 @@ useEffect(() => {
     setTvLoading(true);
 
     try {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/tv/popular?api_key=5397bbf0a2433675faec26633a785796&page=${tvPage}`
-      );
-      const data = await res.json();
+      const data = await tmdbFetch("tv/popular", {
+  page: String(tvPage),
+});
 
       if (!data.results?.length) {
         setHasMoreTV(false);
@@ -610,11 +589,10 @@ useEffect(() => {
   {/* FETCH TV BY GENRE */}
 
   const fetchTVByGenre = async (genreId, page = 1) => {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=5397bbf0a2433675faec26633a785796&with_genres=${genreId}&page=${page}`
-  );
-
-  const data = await res.json();
+  const data = await tmdbFetch("discover/tv", {
+  with_genres: String(genreId),
+  page: String(page),
+});
 
   if (page === 1) {
     setGenreTV(data.results || []);
