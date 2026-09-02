@@ -68,14 +68,8 @@ const getGenreNames = (movie, limit = 2) => {
 };
 
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null);
   
-{/*
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false); 
-  */}
-
   const [movieDetails, setMovieDetails] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(null);
   const [cast, setCast] = useState([]);
@@ -334,41 +328,6 @@ const openTrailer = async (movie) => {
 };
 
 
-
-const searchTMDB = async (query) => {
-  if (!query.trim()) {
-    setSearchResults([]);
-    setIsSearching(false);
-    return;
-  }
-
-  try {
-    setIsSearching(true);
-
-    const res = await fetch(
-      `https://api.themoviedb.org/3/search/multi?api_key=5397bbf0a2433675faec26633a785796&query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`
-    );
-
-    const data = await res.json();
-
-    setSearchResults(
-      (data.results || []).filter(
-        (item) =>
-          item.media_type === "movie" ||
-          item.media_type === "tv"
-      )
-    );
-
-  } catch (error) {
-    console.error("Search error:", error);
-    setSearchResults([]);
-  } finally {
-    setIsSearching(false);
-  }
-};
-
-
-
 const toggleLike = (movie) => {
   setLikedMovies((prev) => {
     const exists = prev.some((item) => item.id === movie.id);
@@ -485,18 +444,6 @@ useEffect(() => {
     .then((data) => setTvCrime(data.results || []));
 }, [mode]);
 
-
-
-{/*
-  useEffect(() => {
-  const delaySearch = setTimeout(() => {
-    searchTMDB(searchTerm);
-  }, 500);
-
-  return () => clearTimeout(delaySearch);
-}, [searchTerm]);
-
-*/}
 
   // HERO ROTATION
   useEffect(() => {
@@ -868,15 +815,11 @@ const MovieCard = ({ movie, isTV }) => (
       <h2>{title}</h2>
 
       <div className="movie-container">
-        {movies
-          ?.filter((m) =>
-            (m.title || m.name || "")
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
-          )
-          .map((movie) => (
+        
+        {movies?.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
+
       </div>
     </section>
   );
@@ -1233,34 +1176,6 @@ const selectedMovieGenreName =
 </span>
 
 )}
-
-{/*     SEARCH BAR     */}
-
-  {mode === "movies" && (
-  <div className="search-wrapper">
-
-  <span className="search-icon">🔎</span>
-
-  <input
-    className="search-bar"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    placeholder="Search movies & TV shows..."
-  />
-
-  {searchTerm && (
-    <button
-      className="search-clear"
-      onClick={() => setSearchTerm("")}
-      aria-label="Clear search"
-    >
-      ✕
-    </button>
-  )}
-
-</div>
-
-  )}
 
 </nav> 
 
