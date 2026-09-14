@@ -4,9 +4,9 @@
 <br>
 <h3>✨ About the Project</h3>
 
-MovieFlix is a modern movie browsing platform built with React, designed to recreate the cinematic feel of Netflix — but with a softer, more aesthetic touch 🎀
+MovieFlix is a modern movie browsing/discovery platform built with React, designed to recreate the cinematic feel of Netflix — but with a softer, more aesthetic touch 🎀
 
-It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, scrollable experience where users can explore movies and TV shows effortlessly.
+It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, scrollable experience where users can discover their next watch effortlessly.
 <br>
 <br>
 <h3>This project focuses on:</h3>
@@ -25,11 +25,12 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 
 <h3>💕 What You Can Do :</h3>
 🔥 Explore trending & popular movies
-⭐ View top-rated films
+👥 Click on actors for more informations
+🕶 Recommendations
+⭐ View top-10 films and TV shows
 🎞️ Browse by categories (Action, Comedy, etc.)
 📺 Switch between Movies & TV Shows
-🔍 Search anything instantly
-🎬 Watch trailers via YouTube
+🎬 Watch trailers 
 ♾️ Scroll endlessly like Netflix
 <br>
 <br>
@@ -46,7 +47,7 @@ TMDB API
 <br>
 <br>
 
-<h4>This project focuses on creating a soft cinematic feel:</h4>
+<h4>This project focuses on creating a soft, cinematic feel:</h4>
 
 dark elegant UI 🎬
 smooth hover interactions ✨
