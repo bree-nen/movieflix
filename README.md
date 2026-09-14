@@ -25,13 +25,21 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 
 <h3>💕 What You Can Do :</h3>
 🔥 Explore trending & popular movies
+<br>
 👥 Click on actors for more informations
+<br>
 🕶 Recommendations
+<br>
 ⭐ View top-10 films and TV shows
+<br>
 🎞️ Browse by categories (Action, Comedy, etc.)
+<br>
 📺 Switch between Movies & TV Shows
+<br>
 🎬 Watch trailers 
+<br>
 ♾️ Scroll endlessly like Netflix
+
 <br>
 <br>
 <h3>🧠 Tech Stack</h3>
