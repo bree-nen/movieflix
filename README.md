@@ -78,4 +78,4 @@ https://www.themoviedb.org/documentation/api
 Hosted on Netlify 💫
 Automatically updates whenever new code is pushed 🔁
 
-👩‍💻 Creator
+👩‍💻 Bree Nen
