@@ -45,8 +45,10 @@ It pulls real-time data from the TMDB API 🎥 and transforms it into a smooth, 
 <h3>🧠 Tech Stack</h3>
 
 💻 Frontend
-React (Vite) ⚛️
-JavaScript (ES6+) 🟡
+React (Vite) 
+<br>
+⚛️JavaScript (ES6+) 🟡
+<br>
 CSS3 🎨
 <br>
 <br>
