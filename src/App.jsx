@@ -7,10 +7,58 @@ import {
 } from "./api";
 import "./App.css";
 
+
+{/* Events */}
+
+const EVENTS = [
+  {
+    id: 1,
+    title: "Upcoming Concert",
+    category: "Concerts",
+    location: "Johannesburg",
+    date: "12 Oct 2026",
+    image:
+      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80",
+    ticketUrl: "#",
+  },
+  {
+    id: 2,
+    title: "Live Comedy Night",
+    category: "Comedy",
+    location: "Johannesburg",
+    date: "18 Oct 2026",
+    image:
+      "https://images.unsplash.com/photo-1585699324551-f6c309eedeca?auto=format&fit=crop&w=900&q=80",
+    ticketUrl: "#",
+  },
+  {
+    id: 3,
+    title: "Live Theatre",
+    category: "Theatre",
+    location: "Pretoria",
+    date: "25 Oct 2026",
+    image:
+      "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=900&q=80",
+    ticketUrl: "#",
+  },
+  {
+    id: 4,
+    title: "Music Festival",
+    category: "Festivals",
+    location: "Cape Town",
+    date: "31 Oct 2026",
+    image:
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=900&q=80",
+    ticketUrl: "#",
+  },
+];
+
+
+
+
 function App() {
 
    
-
     const GENRES = {
   28: "Action",
   12: "Adventure",
@@ -63,7 +111,6 @@ const getGenreNames = (movie, limit = 2) => {
     .join(", ");
 };
 
-
   const [selectedMovie, setSelectedMovie] = useState(null);
   
   const [movieDetails, setMovieDetails] = useState(null);
@@ -107,6 +154,11 @@ const [tvComedy, setTvComedy] = useState([]);
 const [tvSciFi, setTvSciFi] = useState([]);
 const [tvCrime, setTvCrime] = useState([]);
 
+
+/* EVENTS */
+  const [eventCategory, setEventCategory] = useState("All");
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterMessage, setNewsletterMessage] = useState("");
 
   const [trending, setTrending] = useState([]);
   
@@ -238,6 +290,13 @@ const openActor = async (actor) => {
 };
 
   const closeModal = () => setSelectedMovie(null);
+
+  {/* EVENTS */}
+
+  const filteredEvents =
+  eventCategory === "All"
+    ? EVENTS
+    : EVENTS.filter((event) => event.category === eventCategory);
 
   {/* TRAILER, TRAILER FALLBACK */}
 
@@ -885,9 +944,6 @@ const selectedMovieGenreName =
           MOVIEFLIX
         </h1>
          
-
-        
-
         <button
           onClick={() => setMode("tv")}
           style={{
@@ -909,9 +965,6 @@ const selectedMovieGenreName =
         </button>
 
         
-
-   
-
         {/*TV SHOWS GENRE BUTTON*/}
 
 
@@ -936,7 +989,7 @@ const selectedMovieGenreName =
         cursor: "pointer",
         
       }}
-      class="desktop-only"
+      className="desktop-only"
     >
       Genres
     </button>
@@ -1050,7 +1103,7 @@ const selectedMovieGenreName =
         cursor: "pointer",
         
       }}
-      class="desktop-only"
+      className="desktop-only"
     >
       Genres
     </button> 
@@ -1132,6 +1185,34 @@ const selectedMovieGenreName =
   </div>
 )}
 
+
+ {/* EVENTS 
+
+    <button
+  className={`nav-button ${mode === "events" ? "active" : ""}`}
+  onClick={() => setMode("events")}
+    >
+    Events
+   </button>
+*/}
+
+
+{/* EVENTS BUTTON */}
+
+<button
+  onClick={() => setMode("events")}
+  style={{
+    marginLeft: "5px",
+    background: "transparent",
+    color: mode === "events" ? "#e50914" : "white",
+    padding: "6px 6px",
+    border: "none",
+    borderRadius: "0",
+    cursor: "pointer",
+  }}
+>
+  Events
+</button>
 
 {/* WATCHLIST */}
 
@@ -1558,11 +1639,25 @@ const selectedMovieGenreName =
 {/* CONTENT */}
 
 
-  {mode === "movies" ? (
+  {mode === "movies" && (
         <>
+  <section>
 
+  <div className="movie-section-header">
 
-      <section>
+    <span className="section-kicker">
+      TRENDING NOW
+    </span>
+
+    <h2>
+      Trending Movies
+    </h2>
+
+    <p>
+      Discover the movies everyone is watching right now.
+    </p>
+
+  </div>
 
   <div
     style={{
@@ -1570,17 +1665,9 @@ const selectedMovieGenreName =
       alignItems: "center",
       gap: "12px",
       marginBottom: "10px",
+      justifyContent: "center",
     }}
   >
-    <h2 style={{ 
-      margin: 0,
-       color:"white",
-       marginTop: "25px",
-       paddingLeft: "100px"      
-       }}>
-         Trending
-         
-    </h2>
 
     <button
       onClick={() => setTrendingPeriod("day")}
@@ -1592,10 +1679,9 @@ const selectedMovieGenreName =
           trendingPeriod === "day" ? "#e50914" : "transparent",
         color: "white",
         cursor: "pointer",
-        marginTop: "25px ",
-         
+        marginTop: "25px",
       }}
-    class="desktop-only"
+      className="desktop-only"
     >
       Today
     </button>
@@ -1610,43 +1696,43 @@ const selectedMovieGenreName =
           trendingPeriod === "week" ? "#e50914" : "transparent",
         color: "white",
         cursor: "pointer",
-        marginTop: "25px ",
+        marginTop: "25px",
       }}
-      class="desktop-only"
+      className="desktop-only"
     >
       This Week
     </button>
+
   </div>
 
-<br/>
-
-  <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingRight:"80px" }}>
-  Movies trending globally right now.
-  Updated daily and weekly based on what people are watching.
-  </p>
-
   <MovieRow title="" movies={trending} />
-
-
-
- {/*<AdBanner /> */} 
-
 
 </section>
 
 
-{/* TOP 10 TRENDING */}
 
+
+{/* TOP 10 TRENDING */}
 
 <section className="top10-section">
 
-  <div className="top10-header">
-    <h2>Top 10 Trending</h2>
-  </div>
+  <div className="movie-section-header">
 
-  <p className="top10-description">
+  <span className="section-kicker">
+    MOVIEFLIX TOP 10
+  </span>
+
+  <h2>
+    Top 10 Trending
+  </h2>
+
+  <p>
     The most popular movies and TV shows trending right now.
   </p>
+
+</div>
+
+<br></br>
 
   <div className="top10-tabs">
 
@@ -1672,7 +1758,10 @@ const selectedMovieGenreName =
       .slice(0, 10)
       .map((movie, index) => (
 
-        <div className="top10-card" key={movie.id}>
+        <div
+          className="top10-card"
+          key={movie.id}
+        >
 
           <span className="top10-number">
             {index + 1}
@@ -1698,152 +1787,93 @@ const selectedMovieGenreName =
 
 </section>
 
-  
 
 
-<section>
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      marginBottom: "10px",
-    }}
-  >
 
-         <h2 style={{ 
-                 margin: 0,
-                 color:"red",
-                 marginTop: "25px",
-                 paddingLeft: "100px"      
-               }}>
-               Top Rated
-         
-        </h2>
+  <section>
+
+  <div className="movie-section-header">
+
+    <span className="section-kicker">
+      TOP RATED
+    </span>
+
+    <h2 className="movie-headings">
+      Top Rated
+    </h2>
+
+    <p>
+      From timeless classics
+      to modern masterpieces, these are the movies with the best
+      ratings worldwide.
+    </p>
+
+  </div>
+
+  <MovieRow title="" movies={topRated} />
+
+</section>
+
+
+
+<div className="movie-section-header">
+
+  <span className="section-kicker">
+    ADRENALINE & ACTION
+  </span>
+
+  <h2>
+    Action Movies
+  </h2>
+
+  <p>
+    Explosive adventures, epic battles and unforgettable heroes.
+  </p>
+
 </div>
 
-<br/>
-           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", marginLeft: "50px"}}>
-                Highly rated movies loved by audiences.From timeless classics to modern masterpieces, these are the movies with the best ratings worldwide.
-           </p>
+<MovieRow title="" movies={action} />
 
-       <MovieRow title="" movies={topRated} />
-  
-            {/*<AdBanner /> */} 
 
-         </section>
 
-<section>
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      marginBottom: "10px",
-    }}
-  >
 
-         <h2 style={{ 
-                 margin: 0,
-                 color:"red",
-                 marginTop: "25px",
-                 paddingLeft: "100px"      
-               }}>
-               Action Movies
-         
-        </h2>
+<div className="movie-section-header">
+
+  <span className="section-kicker">
+    GOOD VIBES
+  </span>
+
+  <h2>
+    Comedy Movies
+  </h2>
+
+  <p>
+    Laugh-out-loud movies for your next movie night.
+  </p>
+
 </div>
+<MovieRow title="" movies={comedy} />
 
-<br/>
-           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"70px" }}>
-                Dive into a world of explosive action, intense combat, high-stakes missions, and adrenaline-fueled adventures featuring some of cinema's biggest heroes and villains.
-           </p>
+  {/* 📋 MY WATCHLIST */}
 
-       <MovieRow title="" movies={action} />
-  
-           {/*<AdBanner /> */} 
+{watchlist.length > 0 && (
+  <section id="watchlist-section">
 
+    <div className="movie-section-header">
 
-         </section>
+      <span className="section-kicker">
+        YOUR COLLECTION
+      </span>
 
-         <section>
-
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      marginBottom: "10px",
-    }}
-  >
-
-         <h2 style={{ 
-                 margin: 0,
-                 color:"red",
-                 marginTop: "25px",
-                 paddingLeft: "100px"      
-               }}>
-               Comedy Movies
-         
-        </h2>
-</div>
-
-<br/>
-           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"54px" }}>
-                From clever jokes to outrageous adventures, these comedy favorites are guaranteed to bring smiles, laughter, and plenty of entertainment.
-           </p>
-
-       <MovieRow title="" movies={comedy} />
-  
-            {/*<AdBanner /> */} 
-
-
-         </section>     
-
-        {/* 📋 MY WATCHLIST */}
-
-     {watchlist.length > 0 && (
-    <section id="watchlist-section">
-
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        marginBottom: "10px",
-      }}
-    >
-
-      <h2
-        style={{
-          margin: 0,
-          color: "red",
-          marginTop: "25px",
-          paddingLeft: "100px",
-        }}
-      >
+      <h2>
         My Watchlist
       </h2>
 
+      <p>
+        Movies you've saved to watch later.
+      </p>
+
     </div>
-
-    <br />
-
-    <p
-
-  style={{
-    opacity: 0.7,
-    fontSize: "17px",
-    marginTop: "-8px",
-    marginLeft: "50px",
-    paddingLeft: "50px",
-    textAlign: "left",
-    alignSelf: "flex-start",
-    width: "100%",
-  }}
- >
-  Movies you've saved to watch later.
-  </p>
 
     <MovieRow
       title=""
@@ -1851,43 +1881,55 @@ const selectedMovieGenreName =
     />
 
   </section>
+
 )}
 
+        <section className="movie-row">
 
-          <section className="movie-row">
+  <div className="movie-section-header">
 
-            <h2  style={{ 
-                 margin: 0,
-                 color:"red",
-                 marginTop: "25px",
-                 paddingLeft: "100px"      
-               }}>
-            
-               {selectedMovieGenre === "All"
-                 ? "All Popular Movies Of All Times"
-                 : `🎬 ${selectedMovieGenreName} Movies`}
-           </h2>
-           <br/>
-           <p style={{ opacity: 0.7, fontSize: "17px", marginTop: "-8px", paddingLeft:"50px" }}
-           >Discover the movies everyone is talking about, from blockbuster hits to fan favorites that are capturing audiences around the world.
-            Discover stories that define modern storytelling and continue to resonate with viewers around the world.</p>
-           <p style={{ color: "red"}}> Discover stories that have defined cinema and stood the test of time.</p>
+    <span className="section-kicker">
+      DISCOVER MORE
+    </span>
 
-          {/*<AdBanner /> */} 
+    <h2>
+      {selectedMovieGenre === "All"
+        ? "Popular Movies"
+        : `🎬 ${selectedMovieGenreName} Movies`}
+    </h2>
 
-           <div className="movie-feed">
-           {(selectedMovieGenre === "All" ? feedMovies : genreMovies).map((movie) => (
-           <MovieCard key={movie.id} movie={movie} />
-            ))}
-           </div>
+    <p>
+      Discover the movies everyone is talking about, from blockbuster
+      hits to fan favorites capturing audiences around the world.
+    </p>
+
+  </div>
+
+  {/* <AdBanner /> */}
+
+  <div className="movie-feed">
+
+    {(selectedMovieGenre === "All" ? feedMovies : genreMovies).map((movie) => (
+      <MovieCard
+        key={movie.id}
+        movie={movie}
+      />
+    ))}
+
+  </div>
+
+</section>
 
 
-          </section>
+    
         </>
 
+    )}
 
 
-) : (
+   {/* TV SHOWS */}
+
+      {mode === "tv" && (
 
   <>
 
@@ -2109,6 +2151,198 @@ const selectedMovieGenreName =
   </>
 
 )}
+
+
+
+{/* EVENTS */}
+
+{mode === "events" && (
+  <section className="events-page">
+
+    <div className="events-hero">
+      <div className="events-hero-content">
+        <span className="events-eyebrow">
+          MOVIEFLIX EVENTS
+        </span>
+
+        <h1 className="events-title">
+          What's happening
+          <br />
+          <span>near you?</span>
+        </h1>
+
+        <p>
+          Discover concerts, comedy, festivals and live
+          entertainment.
+        </p>
+      </div>
+    </div>
+
+    <div className="events-container">
+
+      <div className="events-heading">
+        <div>
+          <span className="event-kicker">LIVE ENTERTAINMENT</span>
+
+          <h2 className="events-title">Upcoming Events</h2>
+
+          <p>
+            Find something exciting to do and get your tickets.
+          </p>
+        </div>
+      </div>
+
+      <div className="event-filters">
+
+        {[
+          "All",
+          "Concerts",
+          "Comedy",
+          "Theatre",
+          "Festivals",
+        ].map((category) => (
+          <button
+            key={category}
+            className={
+              eventCategory === category
+                ? "event-filter active"
+                : "event-filter"
+            }
+            onClick={() => setEventCategory(category)}
+          >
+            {category}
+          </button>
+        ))}
+
+      </div>
+
+      <div className="events-grid">
+
+        {filteredEvents.map((event) => (
+          <article className="event-card" key={event.id}>
+
+            <div className="event-image-wrapper">
+
+              <img
+                src={event.image}
+                alt={event.title}
+                className="event-image"
+              />
+
+              <span className="event-category">
+                {event.category}
+              </span>
+
+            </div>
+
+            <div className="event-card-content">
+
+              <h3>{event.title}</h3>
+
+              <div className="event-info">
+                <span>📍 {event.location}</span>
+                <span>📅 {event.date}</span>
+              </div>
+
+              <a
+                href={event.ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ticket-button"
+              >
+                🎟️ Get Tickets
+              </a>
+
+            </div>
+
+          </article>
+        ))}
+
+      </div>
+
+    </div>
+
+    {/* NEWSLETTER */}
+
+    <section className="newsletter-section">
+
+      <div className="newsletter-glow"></div>
+
+      <div className="newsletter-content">
+
+        <span className="newsletter-icon">🍿</span>
+
+        <span className="section-kicker">
+          MOVIEFLIX WEEKLY
+        </span>
+
+        <h2>
+          
+          <span>Never miss what's happening.</span>
+        </h2>
+
+        <p>
+          Get the latest movies, TV shows, trailers and
+          upcoming events delivered straight to your inbox.
+        </p>
+
+        <form
+          className="newsletter-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            if (!newsletterEmail) {
+              setNewsletterMessage(
+                "Please enter your email address."
+              );
+              return;
+            }
+
+            setNewsletterMessage(
+              "You're on the list! 🎬"
+            );
+
+            setNewsletterEmail("");
+          }}
+        >
+
+          <input
+            type="email"
+            placeholder="Enter your email address"
+            value={newsletterEmail}
+            onChange={(e) =>
+              setNewsletterEmail(e.target.value)
+            }
+            required
+          />
+
+          <button type="submit">
+            Subscribe
+          </button>
+
+        </form>
+
+        {newsletterMessage && (
+          <p className="newsletter-message">
+            {newsletterMessage}
+          </p>
+        )}
+
+        <small>
+          By subscribing, you agree to receive MovieFlix
+          updates. You can unsubscribe at any time.
+        </small>
+
+      </div>
+
+    </section>
+
+  </section>
+)} 
+
+
+
+
 
         {/* 
       ) : (
@@ -2773,6 +3007,8 @@ const selectedMovieGenreName =
 
   </div>
 )}
+
+
 
 
 
