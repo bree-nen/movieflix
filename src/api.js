@@ -1,7 +1,7 @@
 export const IMAGE_BASE_URL =
   "https://image.tmdb.org/t/p/w500";
 
-const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_API_KEY = "5397bbf0a2433675faec26633a785796";
 
 export const tmdbFetch = async (path, params = {}) => {
   const searchParams = new URLSearchParams(params);
