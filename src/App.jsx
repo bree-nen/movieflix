@@ -10,7 +10,7 @@ import "./App.css";
 
 {/* Events */}
 
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 
 const EVENTS = [
   {
