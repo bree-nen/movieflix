@@ -5,10 +5,12 @@ import {
   tmdbFetch,
   IMAGE_BASE_URL,
 } from "./api";
+import MaintenancePage from "./MaintenancePage";
 import "./App.css";
 
-
 {/* Events */}
+
+const MAINTENANCE_MODE = true;
 
 const EVENTS = [
   {
@@ -57,6 +59,15 @@ const EVENTS = [
 
 
 function App() {
+  if (MAINTENANCE_MODE) {
+    return <MaintenancePage />;
+  }
+
+  return <MovieFlixApp />;
+}
+
+function MovieFlixApp() {
+
 
    
     const GENRES = {
