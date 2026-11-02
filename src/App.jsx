@@ -951,6 +951,7 @@ const selectedMovieGenreName =
         <h1
           className="logo"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+
         >
           MOVIEFLIX
         </h1>
@@ -2165,7 +2166,7 @@ const selectedMovieGenreName =
 
 
 
-{/* EVENTS */}
+{/* EVENTS 
 
 {mode === "events" && (
   <section className="events-page">
@@ -2273,7 +2274,9 @@ const selectedMovieGenreName =
 
     </div>
 
-    {/* NEWSLETTER */}
+    */}
+
+    {/* NEWSLETTER 
 
     <section className="newsletter-section">
 
@@ -2351,6 +2354,61 @@ const selectedMovieGenreName =
   </section>
 )} 
 
+*/}
+
+
+
+
+{/* EVENTS */}
+
+{mode === "events" && (
+  <section className="events-page">
+
+    <div className="events-coming-soon">
+
+      <div className="events-coming-content">
+
+        <span className="events-eyebrow">
+          MOVIEFLIX PRESENTS
+        </span>
+
+        <div className="events-icon">
+          🎬
+        </div>
+
+        <span className="events-status">
+          <span className="status-dot"></span>
+          COMING SOON
+        </span>
+
+        <h1 className="events-coming-title">
+          Something exciting
+          <br />
+          <span>is coming.</span>
+        </h1>
+
+        <p className="events-coming-description">
+          We're working behind the scenes to bring you
+          an exciting world of entertainment events.
+          From movie premieres and exclusive screenings
+          to concerts, festivals and more.
+        </p>
+
+        <div className="events-coming-divider"></div>
+
+        <h2>EVENTS UNDER CONSTRUCTION</h2>
+
+        <p className="events-coming-subtext">
+          Great experiences are worth waiting for.
+          Stay tuned!
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+)}
 
 
 
